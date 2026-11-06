@@ -1,0 +1,9 @@
+{
+  "url": "https://github.com/ultralytics/assets/releases/download/v8.3.0/yolo11s-seg.pt",
+  "path": "models/yolo11s-seg.pt",
+  "model": "YOLO11s-seg",
+  "release": "v8.3.0",
+  "format": "pytorch",
+  "sha256": "1caa81c0195412efa411b632bcfb8c184939dddb6ae41f6a80c41b211ff257c3",
+  "size_bytes": 20669228
+}

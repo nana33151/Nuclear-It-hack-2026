@@ -1,0 +1,11 @@
+{
+  "url": "https://huggingface.co/pirocheto/schp-atr-18/resolve/a54fa65e7e4f27f21011f652ffc0053ebb24b292/onnx/schp-atr-18-int8-static.onnx",
+  "path": "models/schp/schp-atr-18.onnx",
+  "sha256": "4420d8db8c1f266967c89485786b01209f6d405f320fc0f87e8ced49392cefb5",
+  "model": "SCHP ATR18",
+  "format": "onnx",
+  "quantization": "INT8 static",
+  "revision": "a54fa65e7e4f27f21011f652ffc0053ebb24b292",
+  "processor": "PIL RGB resize 512 bilinear; mean [.406,.456,.485], std [.225,.224,.229]",
+  "size_bytes": 69141996
+}

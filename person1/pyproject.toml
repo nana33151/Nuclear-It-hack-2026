@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=75"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "nuclerit-perception"
+version = "0.1.0"
+description = "Offline person silhouettes, clothing colors and person2 handoff"
+requires-python = ">=3.11,<3.15"
+dependencies = [
+  "ultralytics>=8.3,<9",
+  "av>=14,<18",
+  "numpy>=1.26,<3",
+  "opencv-python>=4.10,<5",
+  "Pillow>=10,<13",
+  "onnxruntime>=1.20,<2",
+  "huggingface-hub>=0.28,<2",
+  "requests>=2.31,<3",
+]
+
+[project.optional-dependencies]
+test = ["pytest>=8,<10"]
+
+[project.scripts]
+perception = "perception.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["perception*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

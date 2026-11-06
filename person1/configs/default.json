@@ -1,0 +1,24 @@
+{
+  "input_dir": "Video",
+  "model": "models/yolo11s-seg.pt",
+  "device": "auto",
+  "imgsz": 960,
+  "confidence": 0.1,
+  "reid_min_confidence": 0.5,
+  "iou": 0.7,
+  "color_mode": "schp",
+  "schp_model": "models/schp/schp-atr-18.onnx",
+  "color_only_usable": true,
+  "preview_frames": 250,
+  "start_frame": 0,
+  "max_frames": null,
+  "camera_offsets": {},
+  "timestamp_origin": 0.0,
+  "quality": {
+    "min_height": 64,
+    "min_width": 24,
+    "min_blur": 20.0,
+    "min_mask_fraction": 0.1,
+    "border_margin": 2
+  }
+}

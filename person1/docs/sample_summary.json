@@ -1,0 +1,47 @@
+[
+  {
+    "camera_id": "camera_new_1",
+    "frames": 100,
+    "detections": 151,
+    "reid_usable": 28,
+    "upper_color_available": 11,
+    "lower_color_available": 18,
+    "elapsed_seconds": 52.528
+  },
+  {
+    "camera_id": "camera_new_2",
+    "frames": 100,
+    "detections": 102,
+    "reid_usable": 100,
+    "upper_color_available": 85,
+    "lower_color_available": 60,
+    "elapsed_seconds": 103.927
+  },
+  {
+    "camera_id": "camera_new_3",
+    "frames": 100,
+    "detections": 183,
+    "reid_usable": 91,
+    "upper_color_available": 0,
+    "lower_color_available": 0,
+    "elapsed_seconds": 146.861
+  },
+  {
+    "camera_id": "camera_new_4",
+    "frames": 100,
+    "detections": 100,
+    "reid_usable": 100,
+    "upper_color_available": 99,
+    "lower_color_available": 79,
+    "elapsed_seconds": 107.694
+  },
+  {
+    "camera_id": "camera_new_5",
+    "frames": 100,
+    "detections": 85,
+    "reid_usable": 31,
+    "upper_color_available": 2,
+    "lower_color_available": 1,
+    "elapsed_seconds": 57.766
+  }
+]
