@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "tracklet.schema.json",
+  "title": "Person2LocalTracklet",
+  "description": "Local single-camera tracklet for Person 3 merge.",
+  "type": "object",
+  "required": [
+    "camera_id",
+    "local_id",
+    "t_start",
+    "t_end",
+    "boxes",
+    "reid_emb",
+    "color_top",
+    "color_bottom",
+    "representative_frame"
+  ],
+  "properties": {
+    "camera_id": { "type": "string" },
+    "local_id": { "type": "string" },
+    "t_start": { "type": "number" },
+    "t_end": { "type": "number" },
+    "boxes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["frame_idx", "timestamp", "bbox", "score"],
+        "properties": {
+          "frame_idx": { "type": "integer" },
+          "timestamp": { "type": "number" },
+          "bbox": {
+            "type": "array",
+            "minItems": 4,
+            "maxItems": 4,
+            "items": { "type": "number" }
+          },
+          "score": { "type": "number" },
+          "usable_for_reid": { "type": "boolean" }
+        }
+      }
+    },
+    "reid_emb": {
+      "description": "L2-normalized mean embedding, or null if unavailable",
+      "oneOf": [
+        { "type": "null" },
+        { "type": "array", "items": { "type": "number" } }
+      ]
+    },
+    "color_top": {
+      "oneOf": [{ "type": "null" }, { "type": "array", "items": { "type": "number" } }]
+    },
+    "color_bottom": {
+      "oneOf": [{ "type": "null" }, { "type": "array", "items": { "type": "number" } }]
+    },
+    "representative_frame": { "type": "integer" },
+    "split_reason": {
+      "oneOf": [{ "type": "null" }, { "type": "string" }]
+    },
+    "quality": {
+      "type": "object",
+      "properties": {
+        "n_frames": { "type": "integer" },
+        "n_reid_crops": { "type": "integer" },
+        "reid_dispersion": { "oneOf": [{ "type": "null" }, { "type": "number" }] }
+      }
+    }
+  },
+  "additionalProperties": true
+}

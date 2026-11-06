@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "detection.schema.json",
+  "title": "Person1Detection",
+  "description": "One person detection / silhouette frame from Person 1. Person 2 reads only this contract.",
+  "type": "object",
+  "required": ["camera_id", "frame_idx", "timestamp", "bbox", "score", "usable_for_reid"],
+  "properties": {
+    "camera_id": { "type": "string" },
+    "frame_idx": { "type": "integer", "minimum": 0 },
+    "timestamp": { "type": "number" },
+    "bbox": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 4,
+      "items": { "type": "number" },
+      "description": "[x1, y1, x2, y2] in pixel coords"
+    },
+    "score": { "type": "number" },
+    "mask": {
+      "description": "RLE object, absolute path, or null",
+      "oneOf": [
+        { "type": "null" },
+        { "type": "string" },
+        { "type": "object" }
+      ]
+    },
+    "keypoints": {
+      "description": "Optional YOLO-pose keypoints",
+      "oneOf": [{ "type": "null" }, { "type": "array" }, { "type": "object" }]
+    },
+    "usable_for_reid": { "type": "boolean" },
+    "crop_path": {
+      "description": "Optional path to person crop image from Person 1",
+      "oneOf": [{ "type": "null" }, { "type": "string" }]
+    },
+    "color_top": {
+      "description": "Optional SCHP top-color histogram or RGB summary from Person 1",
+      "oneOf": [{ "type": "null" }, { "type": "array", "items": { "type": "number" } }]
+    },
+    "color_bottom": {
+      "oneOf": [{ "type": "null" }, { "type": "array", "items": { "type": "number" } }]
+    },
+    "det_id": {
+      "description": "Optional row id from Person 1 table",
+      "oneOf": [{ "type": "null" }, { "type": "string" }, { "type": "integer" }]
+    }
+  },
+  "additionalProperties": true
+}
