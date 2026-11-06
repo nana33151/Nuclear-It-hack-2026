@@ -1,0 +1,11 @@
+ultralytics>=8.3,<9
+opencv-python>=4.10,<5
+numpy>=1.26,<3
+scipy>=1.11
+PyYAML>=6.0
+streamlit>=1.32
+torch  # already present in many envs; CUDA optional
+torchvision
+Pillow>=10
+yacs>=0.1.8
+# SOLIDER-REID graph lives in third_party/SOLIDER-REID (vendored + CPU patch)

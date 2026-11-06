@@ -1,11 +1,11 @@
-"""SOLIDER-REID wrapper. Requires torch + weights file.
-
-Until then pipeline should use reid.backend: color_mock.
-"""
+"""SOLIDER-REID wrapper around app.reid_solider (vendored tinyvision + Market weights)."""
 
 from __future__ import annotations
 
 from pathlib import Path
+
+import cv2
+import numpy as np
 
 from src.contract import Detection
 
@@ -16,39 +16,51 @@ class SoliderEmbedder:
         weights: str | Path,
         only_usable_for_reid: bool = True,
         device: str | None = None,
+        variant: str = "swin_small",
+        semantic_weight: float = 0.2,
     ) -> None:
         self.weights = Path(weights)
         self.only_usable_for_reid = only_usable_for_reid
         self.device = device
+        self.variant = variant
+        self.semantic_weight = semantic_weight
         self._model = None
-        self._torch = None
 
     def _lazy_init(self) -> None:
         if self._model is not None:
             return
-        try:
-            import torch
-        except ImportError as e:
-            raise RuntimeError(
-                "SOLIDER needs torch. Use a Python 3.10–3.11 env and pip install torch, "
-                "or set reid.backend: color_mock until then."
-            ) from e
-        if not self.weights.exists():
-            raise FileNotFoundError(
-                f"SOLIDER weights not found: {self.weights}. "
-                "Download Swin-B ReID weights into weights/ and update configs/default.yaml."
-            )
-        self._torch = torch
-        # Full SOLIDER-REID graph is vendored later; keep explicit failure until wired.
-        raise NotImplementedError(
-            "SOLIDER model graph not vendored yet. Weights path is reserved; "
-            "use reid.backend: color_mock for now, then drop in tinyvision/SOLIDER-REID inference."
+        # Import from repo-root app package (mtmc-person2 is nested).
+        import sys
+
+        root = Path(__file__).resolve().parents[3]
+        if str(root) not in sys.path:
+            sys.path.insert(0, str(root))
+        from app.reid_solider import SoliderReID
+
+        w = self.weights
+        if not w.is_absolute():
+            # Prefer repo-root weights/, then local mtmc-person2/weights/
+            cand = root / w
+            if not cand.exists():
+                cand = Path(__file__).resolve().parents[2] / w
+            w = cand
+        self._model = SoliderReID(
+            w,
+            variant=self.variant,
+            device=self.device or "auto",
+            semantic_weight=self.semantic_weight,
         )
 
     def embed(self, detection: Detection) -> list[float] | None:
         if self.only_usable_for_reid and not detection.usable_for_reid:
             return None
-        if not detection.crop_path:
-            return None
         self._lazy_init()
-        return None
+        crop = None
+        if detection.crop_path:
+            crop = cv2.imread(str(detection.crop_path))
+        if crop is None:
+            return None
+        emb = self._model.embed_bgr_crop(crop)
+        if emb is None:
+            return None
+        return emb.astype(np.float64).tolist()

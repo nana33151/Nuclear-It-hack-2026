@@ -23,7 +23,7 @@ detections:
 | Stub MOT | запасной |
 | ReID `color_mock` из цветов P1 | работает |
 | Резка по дисперсии ReID | работает |
-| SOLIDER | слот под веса + torch (ещё не граф модели) |
+| SOLIDER | `third_party/SOLIDER-REID` + `weights/swin_s_market.pth` |
 
 ## Запуск
 
@@ -36,12 +36,11 @@ py -3 scripts/smoke_split.py
 
 Выход: `data/output/tracklets.jsonl` для Person 3.
 
-## SOLIDER позже
+## SOLIDER
 
-1. Python 3.10–3.11 + torch  
-2. Веса Swin-B в `weights/solider_swin_b.pth`  
-3. В конфиге: `reid.backend: solider`  
-4. Допилить `src/reid/solider.py` под inference из [SOLIDER-REID](https://github.com/tinyvision/SOLIDER-REID)
+1. `bash scripts/download_solider_weights.sh` (из корня репо)  
+2. В `configs/default.yaml`: `reid.backend: solider`  
+3. Inference: `src/reid/solider.py` → `app.reid_solider.SoliderReID` ([SOLIDER-REID](https://github.com/tinyvision/SOLIDER-REID))
 
 ## Граница роли
 

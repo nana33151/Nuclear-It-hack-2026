@@ -16,8 +16,10 @@ def build_embedder(backend: str, **kwargs: Any):
         )
     if backend == "solider":
         return SoliderEmbedder(
-            weights=kwargs.get("weights", "weights/solider_swin_b.pth"),
+            weights=kwargs.get("weights", "weights/swin_s_market.pth"),
             only_usable_for_reid=bool(kwargs.get("only_usable_for_reid", True)),
             device=kwargs.get("device"),
+            variant=str(kwargs.get("variant", "swin_small")),
+            semantic_weight=float(kwargs.get("semantic_weight", 0.2)),
         )
     raise ValueError(f"Unknown reid.backend: {backend}")

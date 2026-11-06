@@ -21,11 +21,14 @@ mot:
 
 reid:
   enabled: true
-  # color_mock: works now from P1 color_* fields
-  # solider: needs torch + weights/solider_swin_b.pth (+ model graph next)
-  backend: color_mock
-  weights: weights/solider_swin_b.pth
+  # color_mock: mean RGB stand-in
+  # solider: third_party/SOLIDER-REID + weights/swin_s_market.pth
+  backend: solider
+  variant: swin_small
+  weights: weights/swin_s_market.pth
+  semantic_weight: 0.2
   only_usable_for_reid: true
+  device: auto
 
 tracklet:
   split_dispersion_threshold: 0.35
