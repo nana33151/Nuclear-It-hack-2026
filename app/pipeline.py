@@ -5,7 +5,7 @@ from __future__ import annotations
 import argparse
 import json
 from pathlib import Path
-from typing import Any
+from typing import Any, Callable
 
 import yaml
 
@@ -13,7 +13,7 @@ from app.detect import detect_people, iter_video_sampled, load_yolo_seg
 from app.export_video import export_previews
 from app.local_track import run_mot
 from app.merge import build_overlays, to_global_tracks
-from app.paths import ROOT
+from app.paths import ROOT, ensure_import_paths
 from app.reid_solider import build_solider_from_cfg
 
 
@@ -47,6 +47,105 @@ def _probe_fps(path: Path) -> float:
     return fps
 
 
+# ----------------------------------------------------------------------
+# Mirror filter wiring
+# ----------------------------------------------------------------------
+
+ApplyMirrorFilter = Callable[[str, list], list]
+
+
+def _resolve_aliases(mc: dict[str, Any]) -> dict[str, str]:
+    """Config aliases first; fall back to projectors_loader auto-mapping."""
+    aliases = {str(k): str(v) for k, v in (mc.get("camera_aliases") or {}).items()}
+    if aliases:
+        return aliases
+    try:
+        from app.projectors_loader import available_camera_aliases
+        auto = available_camera_aliases()
+        if auto:
+            print(f"mirror filter: using auto aliases from projectors_loader: {auto}")
+            return auto
+    except Exception as exc:  # noqa: BLE001
+        print(f"[warn] mirror filter: auto alias discovery failed: {exc}")
+    return {}
+
+
+def _make_mirror_filter(
+    cfg: dict[str, Any],
+    camera_ids: list[str],
+) -> ApplyMirrorFilter | None:
+    """Build ``apply(camera_id, dets) -> kept_dets`` or None if disabled."""
+    mc = (cfg or {}).get("mirror") or {}
+    if not mc.get("enabled", False):
+        print("mirror filter: disabled (config.mirror.enabled=false)")
+        return None
+
+    ensure_import_paths()
+    try:
+        from src.geometry import OfficeModel
+        from src.geometry.filter import filter_detections_by_mirror
+        from src.geometry.projectors import Projector as PlanProjector
+    except Exception as exc:  # noqa: BLE001
+        print(f"[warn] mirror filter disabled (import failed): {exc}")
+        return None
+
+    office = OfficeModel(
+        mirror_margin=float(mc.get("mirror_margin", 0.25)),
+        mirror_back_depth=float(mc.get("mirror_back_depth", 8.0)),
+    )
+    aliases = _resolve_aliases(mc)
+    debug_first_n = int(mc.get("debug_first_n", 5))
+
+    unmatched = [
+        c for c in camera_ids
+        if c not in office.cameras and c not in aliases
+    ]
+    if unmatched:
+        print(
+            f"[warn] mirror filter: cameras not in aliases, will NOT be filtered: "
+            f"{unmatched}"
+        )
+
+    proj_cache: dict[str, Any] = {}
+    missing: set[str] = set()
+
+    def _projector_for_camera(office_camera_id: str, bbox):
+        if office_camera_id in missing:
+            return None
+        proj = proj_cache.get(office_camera_id)
+        if proj is None:
+            try:
+                proj = PlanProjector.get(office_camera_id)
+            except ValueError:
+                missing.add(office_camera_id)
+                print(f"[warn] mirror filter: no homography for {office_camera_id}")
+                return None
+            proj_cache[office_camera_id] = proj
+        try:
+            return proj.bbox_bottom_center_to_plan(bbox)
+        except Exception:
+            return None
+
+    def apply(camera_id: str, dets: list) -> list:
+        if not dets:
+            return dets
+        return filter_detections_by_mirror(
+            dets,
+            office,
+            _projector_for_camera,
+            camera_id_field="camera_id",
+            camera_aliases=aliases,
+            debug_first_n=debug_first_n,
+        )
+
+    print(f"mirror filter: enabled, aliases={aliases or '(none)'}")
+    return apply
+
+
+# ----------------------------------------------------------------------
+# Main pipeline
+# ----------------------------------------------------------------------
+
 def run(cfg: dict[str, Any]) -> dict[str, Any]:
     video_dir = ROOT / cfg["video_dir"]
     cams = discover_videos(video_dir, cfg.get("cameras"))
@@ -58,6 +157,8 @@ def run(cfg: dict[str, Any]) -> dict[str, Any]:
     reid_model = build_solider_from_cfg(cfg.get("reid"), device=device if device not in ("auto",) else None)
     reid_name = "solider" if reid_model is not None else str((cfg.get("reid") or {}).get("backend", "color"))
     print(f"device={device} model={model_path.name} cameras={len(cams)} reid={reid_name}")
+
+    mirror_apply = _make_mirror_filter(cfg, [cid for cid, _ in cams])
 
     all_tracklets = []
     camera_meta: dict[str, Any] = {}
@@ -91,6 +192,15 @@ def run(cfg: dict[str, Any]) -> dict[str, Any]:
             if n_frames % 20 == 0:
                 print(f"  frames={n_frames} dets_total={len(dets)}")
 
+        # Mirror filter BEFORE local MOT — ghost never reaches ByteTrack.
+        raw_n = len(dets)
+        dropped = 0
+        if mirror_apply is not None and dets:
+            dets = mirror_apply(camera_id, dets)
+            dropped = raw_n - len(dets)
+            if dropped:
+                print(f"  [{camera_id}] mirror filter: dropped {dropped}/{raw_n} detections")
+
         mot_cfg = cfg.get("mot") or {}
         tracklets = run_mot(
             dets,
@@ -110,16 +220,16 @@ def run(cfg: dict[str, Any]) -> dict[str, Any]:
         camera_meta[camera_id] = {
             "path": str(path.relative_to(ROOT)),
             "fps": fps,
+            "n_detections_raw": raw_n,
+            "n_detections_dropped_by_mirror": dropped,
             "n_detections": len(dets),
             "n_tracklets": len(tracklets),
         }
 
-    
     out_dir = ROOT / cfg.get("output_dir", "output")
     out_dir.mkdir(parents=True, exist_ok=True)
     tracks_path = out_dir / cfg.get("tracks_name", "tracks.json")
     overlays_path = out_dir / cfg.get("overlays_name", "overlays.json")
-
 
     merge_cfg = cfg.get("merge", {})
     max_tt = float(merge_cfg.get("max_transition_time", 20.0))
@@ -133,14 +243,13 @@ def run(cfg: dict[str, Any]) -> dict[str, Any]:
         min_hits=int(merge_cfg.get("min_hits", 2)),
         min_confirm_sec=float(merge_cfg.get("min_confirm_sec", 0.4)),
         lost_timeout_sec=merge_cfg.get("lost_timeout_sec"),
-        enable_bev=bool(merge_cfg.get("enable_bev", True)),      # NEW
-        debug=bool(merge_cfg.get("debug", False)),               # NEW
-        debug_path=str(out_dir / "tracker_decisions.json"),      # NEW
+        enable_bev=bool(merge_cfg.get("enable_bev", True)),
+        debug=bool(merge_cfg.get("debug", False)),
+        debug_path=str(out_dir / "tracker_decisions.json"),
     )
 
     overlays = build_overlays(tracks)
 
-    # Drop heavy boxes from tracks.json segments for readability; overlays keep them.
     tracks_light = []
     for tr in tracks:
         tracks_light.append(

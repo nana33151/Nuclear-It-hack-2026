@@ -116,8 +116,6 @@ class Projector:
         ], dtype=np.float64),
     }
 
-
-
     # Lazy per-camera cache (used by trackers via Projector.get(cam)).
     _cache: Dict[str, "Projector"] = {}
 
@@ -236,3 +234,31 @@ class Projector:
     def plan_distance(p1: Sequence[float], p2: Sequence[float]) -> float:
         """Euclidean distance (meters) between two plan points."""
         return float(math.hypot(float(p1[0]) - float(p2[0]), float(p1[1]) - float(p2[1])))
+
+
+# ----------------------------------------------------------------------
+# Detection-level adapter (used by mirror filter and any FrameDet consumer)
+# ----------------------------------------------------------------------
+
+def project_detection(
+    projector: "Projector",
+    det,
+) -> Optional[Tuple[float, float]]:
+    """Adapter: detection (dict or FrameDet-like object) -> plan (X, Y).
+
+    Uses the bbox bottom-center as the floor contact point. Returns None on
+    missing bbox / projection error so callers can default to "keep".
+    """
+    if isinstance(det, dict):
+        bbox = det.get("bbox")
+    else:
+        bbox = getattr(det, "bbox", None)
+    if bbox is None:
+        return None
+    try:
+        return projector.bbox_bottom_center_to_plan(bbox)
+    except Exception:
+        return None
+
+
+__all__ = ["Projector", "project_detection"]

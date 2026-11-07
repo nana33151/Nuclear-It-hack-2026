@@ -103,16 +103,9 @@ def tab_cameras(overlays_doc, tracks_doc, cameras, cam_ids,
             if frame is None:
                 st.error(f"Не читается {meta.get('path')}")
                 continue
+
             items = bev_state.bboxes_for_cam_at(overlays_doc, cam_id, t, tol, tracks_doc)
-            items = bev_state.bboxes_for_cam_at(overlays_doc, cam_id, t, tol, tracks_doc)
-            st.write(
-                f"[debug] cam={cam_id} t={t:.2f} tol={tol:.2f} "
-                f"items={len(items)} "
-                f"mapped={sum(1 for it in items if it.get('global_id') is not None)} "
-                f"frame_idx_from_video={frame_idx}"
-            )
-            if items:
-                st.write(f"[debug] sample: {items[0]}")
+
             draw_items = [
                 {
                     "track_id": it["global_id"],
