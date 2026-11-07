@@ -46,15 +46,10 @@ def run(cfg: dict[str, Any]):
     mirror_cfg = cfg.get("mirror_filter", {})
     if mirror_cfg.get("enabled", False):
         from src.geometry import OfficeModel, filter_detections_by_mirror
+        from src.geometry.projectors import project_detection
 
         office = OfficeModel(mirror_margin=float(mirror_cfg.get("mirror_margin", 0.25)))
-
-        # TODO: replace with real camera-to-floor projector when calibrations exist
-        def projector(det: dict):
-            x1, y1, x2, y2 = det["bbox"]
-            return (x1 + x2) / 2.0, y2
-
-        detections = filter_detections_by_mirror(detections, office, projector)
+        detections = filter_detections_by_mirror(detections, office, project_detection)
     # ----------------------------------------
 
     mot_cfg = cfg.get("mot", {})
