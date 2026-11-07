@@ -1,9 +1,7 @@
 # Person 2 pipeline config. Swap detections.source when Person 1 delivers.
 
 detections:
-  # mock | jsonl | json_dir
   source: mock
-  # Person 1 drop path (jsonl: one detection per line)
   path: data/input/detections.jsonl
   mock:
     camera_id: cam_01
@@ -13,16 +11,14 @@ detections:
     seed: 42
 
 mot:
-  backend: bytetrack  # bytetrack | stub
+  backend: bytetrack
   track_thresh: 0.5
-  track_buffer: 30    # frames; maps to short local gaps (T_local)
+  track_buffer: 30
   match_thresh: 0.8
   frame_rate: 25
 
 reid:
   enabled: true
-  # color_mock: mean RGB stand-in
-  # solider: third_party/SOLIDER-REID + weights/swin_s_market.pth
   backend: solider
   variant: swin_small
   weights: weights/swin_s_market.pth
@@ -33,7 +29,12 @@ reid:
 tracklet:
   split_dispersion_threshold: 0.35
   min_frames: 3
-  representative: middle  # middle | best_score
+  representative: middle
+
+# --- NEW: mirror reflection filter ---
+mirror_filter:
+  enabled: true         # set true when a real projector is available
+  mirror_margin: 0.25     # meters
 
 output:
   dir: data/output

@@ -69,16 +69,21 @@ def _split_by_reid(dets: list[FrameDet], threshold: float) -> list[list[FrameDet
     last = _det_emb(dets[0])
     for d in dets[1:]:
         emb = _det_emb(d)
-        dist = 1.0 - _cosine_sim(last, emb)
-        if dist > threshold and last.shape == emb.shape:
+        # Смена источника эмбеддинга (Solider ↔ color) — режем:
+        # продолжение трека через смену "настоящий ReID → цвет" не заслуживает доверия.
+        if last.shape != emb.shape:
             pieces.append(cur)
             cur = [d]
         else:
-            cur.append(d)
+            dist = 1.0 - _cosine_sim(last, emb)
+            if dist > threshold:
+                pieces.append(cur)
+                cur = [d]
+            else:
+                cur.append(d)
         last = emb
     pieces.append(cur)
     return pieces
-
 
 def _from_dets(dets: list[FrameDet], local_id: int) -> LocalTracklet | None:
     dets = sorted(dets, key=lambda d: d.frame_idx)

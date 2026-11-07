@@ -1,0 +1,124 @@
+{
+  "n_tracks": 4,
+  "n_cross_camera": 2,
+  "reid": "solider",
+  "window": {
+    "start_sec": 175.0,
+    "max_sec": 15.0,
+    "stride": 5
+  },
+  "cameras": {
+    "camera_new_2": {
+      "path": "Video\\camera_new_2.mkv",
+      "fps": 25.0,
+      "n_detections_raw": 173,
+      "n_detections_dropped_by_mirror": 9,
+      "n_detections": 164,
+      "n_tracklets": 4,
+      "preview_mp4": "output\\videos\\camera_new_2.mp4"
+    },
+    "camera_new_3": {
+      "path": "Video\\camera_new_3.mkv",
+      "fps": 25.0,
+      "n_detections_raw": 121,
+      "n_detections_dropped_by_mirror": 0,
+      "n_detections": 121,
+      "n_tracklets": 2,
+      "preview_mp4": "output\\videos\\camera_new_3.mp4"
+    }
+  },
+  "tracks": [
+    {
+      "track_id": 1,
+      "t_start": 175.4,
+      "t_end": 189.8,
+      "cameras": [
+        "camera_new_2"
+      ],
+      "close_reason": "gap_exceeded",
+      "state": "died",
+      "segments": [
+        {
+          "camera_id": "camera_new_2",
+          "local_id": 1,
+          "t_start": 175.4,
+          "t_end": 189.8,
+          "n_boxes": 71
+        }
+      ]
+    },
+    {
+      "track_id": 2,
+      "t_start": 175.4,
+      "t_end": 189.8,
+      "cameras": [
+        "camera_new_2"
+      ],
+      "close_reason": "gap_exceeded",
+      "state": "died",
+      "segments": [
+        {
+          "camera_id": "camera_new_2",
+          "local_id": 2,
+          "t_start": 175.4,
+          "t_end": 189.8,
+          "n_boxes": 70
+        }
+      ]
+    },
+    {
+      "track_id": 3,
+      "t_start": 177.6,
+      "t_end": 189.8,
+      "cameras": [
+        "camera_new_2",
+        "camera_new_3"
+      ],
+      "close_reason": "gap_exceeded",
+      "state": "died",
+      "segments": [
+        {
+          "camera_id": "camera_new_3",
+          "local_id": 1,
+          "t_start": 177.6,
+          "t_end": 188.8,
+          "n_boxes": 57
+        },
+        {
+          "camera_id": "camera_new_2",
+          "local_id": 4,
+          "t_start": 188.8,
+          "t_end": 189.8,
+          "n_boxes": 6
+        }
+      ]
+    },
+    {
+      "track_id": 4,
+      "t_start": 178.4,
+      "t_end": 189.6,
+      "cameras": [
+        "camera_new_2",
+        "camera_new_3"
+      ],
+      "close_reason": "gap_exceeded",
+      "state": "died",
+      "segments": [
+        {
+          "camera_id": "camera_new_3",
+          "local_id": 2,
+          "t_start": 178.4,
+          "t_end": 189.4,
+          "n_boxes": 52
+        },
+        {
+          "camera_id": "camera_new_2",
+          "local_id": 3,
+          "t_start": 188.2,
+          "t_end": 189.6,
+          "n_boxes": 8
+        }
+      ]
+    }
+  ]
+}

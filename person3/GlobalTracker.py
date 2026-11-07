@@ -4,11 +4,22 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from enum import Enum
 from itertools import groupby
-from typing import Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np
 from scipy.optimize import linear_sum_assignment
 from scipy.spatial.distance import cosine
+
+# BEV support. The Projector class lives in mtmc-person2/src/geometry/projectors.py.
+# If that package is importable (e.g. mtmc-person2/src is on sys.path), the type
+# is used directly; otherwise GlobalTracker still works, just without BEV terms.
+try:  # pragma: no cover - import path depends on the deployment layout
+    from geometry.projectors import Projector  # type: ignore
+except Exception:  # pragma: no cover
+    try:
+        from mtmc_person2.src.geometry.projectors import Projector  # type: ignore
+    except Exception:
+        Projector = Any  # type: ignore
 
 
 @dataclass(frozen=True)
@@ -35,6 +46,10 @@ class Tracklet:
     color_upper: np.ndarray
     color_lower: np.ndarray
     boxes: Optional[List] = None
+    # Optional pre-computed BEV position (plan meters). If None and a Projector
+    # is registered for camera_id, the position is derived from boxes[-1]
+    # (bottom-center) at tracking time.
+    plan_pos: Optional[Tuple[float, float]] = None
 
 
 @dataclass
@@ -59,6 +74,9 @@ class _LiveTrack:
     t_start: float = 0.0
     track_id: Optional[int] = None
     close_reason: str = ""
+    # Last known BEV position (plan meters) and the camera it was seen by.
+    plan_pos: Optional[Tuple[float, float]] = None
+    plan_cam: str = ""
 
     @property
     def duration_sec(self) -> float:
@@ -85,12 +103,31 @@ class GlobalTracker:
         min_confirm_sec: float = 0.4,
         lost_priority_margin: float = 0.02,
         unique_margin: float = 0.05,
+        # --- BEV (bird's-eye view) options ---
+        projectors: Optional[Dict[str, "Projector"]] = None,
+        w_bev: float = 0.4,                # weight of the spatial (BEV) term
+        bev_typical_speed: float = 1.2,    # m/s, used to scale the distance similarity
+        bev_max_speed: float = 3.0,        # m/s, hard reject above this speed
+        bev_sigma_scale: float = 2.0,      # sigma = scale * typical_speed * travel_time
+        bev_min_travel: float = 0.25,      # s, floor for the travel-time window
+        debug: bool = False,   
+        lost_timeout_sec: Optional[float] = None,            # collect per-decision reasons
     ):
         self.T = T
         self.min_sim = min_sim
         self.w_reid = w_reid
         self.w_color = w_color
         self.w_time = w_time
+        self.w_bev = float(w_bev)
+        self.bev_typical_speed = float(bev_typical_speed)
+        self.bev_max_speed = float(bev_max_speed)
+        self.bev_sigma_scale = float(bev_sigma_scale)
+        self.bev_min_travel = float(bev_min_travel)
+        self.debug = bool(debug)
+        self.decision_log: List[Dict] = []
+        # camera_id -> Projector; empty dict disables BEV terms (old behavior).
+        self.projectors: Dict[str, "Projector"] = dict(projectors or {})
+
         self.max_transition_time = max_transition_time
         self.transitions: Dict[Tuple[str, str], TransitionEdge] = dict(
             transitions or {}
@@ -108,7 +145,52 @@ class GlobalTracker:
         self.min_confirm_sec = float(min_confirm_sec)
         self.lost_priority_margin = float(lost_priority_margin)
         self.unique_margin = float(unique_margin)
+        self.lost_timeout_sec = (
+            None if lost_timeout_sec is None else float(lost_timeout_sec)
+        )
         self.next_id = 1
+
+    # ------------------------------------------------------------------
+    # BEV helpers
+    # ------------------------------------------------------------------
+
+    def _seg_plan_pos(self, seg: Tracklet) -> Optional[Tuple[float, float]]:
+        """BEV position of a tracklet: explicit plan_pos or from its last bbox."""
+        if seg.plan_pos is not None:
+            return (float(seg.plan_pos[0]), float(seg.plan_pos[1]))
+        proj = self.projectors.get(seg.camera_id)
+        if proj is None or not seg.boxes:
+            return None
+
+        last = seg.boxes[-1]
+        # app/local_track.py stores boxes as dicts; person2 contract uses lists.
+        if isinstance(last, dict):
+            last = last.get("bbox")
+        if not last or len(last) < 4:
+            return None
+
+        x, y = proj.bbox_bottom_center_to_plan(last)
+        return (float(x), float(y))
+
+    def _bev_term(
+        self,
+        pa: Tuple[float, float],
+        pb: Tuple[float, float],
+        gap: float,
+        edge: Optional[TransitionEdge],
+    ) -> float:
+        """Spatial similarity for a cross-camera move, plus a feasibility gate.
+
+        Returns a value in [0, 1]; 0.0 means physically impossible
+        (required speed above bev_max_speed).
+        """
+        dist = float(np.hypot(pa[0] - pb[0], pa[1] - pb[1]))
+        blind = float(edge.min_time) if edge is not None else 0.0
+        travel = max(float(gap), blind, self.bev_min_travel)
+        if dist > self.bev_max_speed * travel:
+            return 0.0  # cannot cover dist metres in travel seconds
+        sigma = self.bev_sigma_scale * self.bev_typical_speed * travel
+        return float(np.exp(-dist / max(sigma, 1e-6)))
 
     def _color_dist(self, c1: np.ndarray, c2: np.ndarray) -> float:
         return float(np.linalg.norm(c1 - c2))
@@ -138,6 +220,7 @@ class GlobalTracker:
 
         gap = self._temporal_gap(a, b)
         cross_cam = a.camera_id != b.camera_id
+        edge = None
 
         if cross_cam and self.transitions:
             edge = self.transitions.get((a.camera_id, b.camera_id))
@@ -157,11 +240,26 @@ class GlobalTracker:
                 else 1.0
             )
 
-        appearance = (
+        num = (
             self.w_reid * reid_sim
             + self.w_color * color_sim
             + self.w_time * time_sim
-        ) / (self.w_reid + self.w_color + self.w_time)
+        )
+        den = self.w_reid + self.w_color + self.w_time
+
+        # --- BEV term: only meaningful for cross-camera moves where both
+        # positions are known (either precomputed or via the projectors).
+        if cross_cam and self.projectors:
+            pa = getattr(a, "plan_pos", None)
+            pb = getattr(b, "plan_pos", None)
+            if pa is not None and pb is not None:
+                bev_sim = self._bev_term(pa, pb, gap, edge)
+                if bev_sim <= 0.0:
+                    return 0.0  # spatially impossible -> reject the association
+                num += self.w_bev * bev_sim
+                den += self.w_bev
+
+        appearance = num / den
         # Topology weight only ranks Hungarian cost; do not scale the min_sim gate.
         return float(max(0.0, min(1.0, appearance)))
 
@@ -191,6 +289,8 @@ class GlobalTracker:
         )
 
     def _lost_timeout(self, tr: _LiveTrack) -> float:
+        if self.lost_timeout_sec is not None:
+            return max(0.0, self.lost_timeout_sec)
         last_cam = tr.segments[-1].camera_id if tr.segments else ""
         outgoing = [
             float(e.max_time)
@@ -268,24 +368,53 @@ class GlobalTracker:
             reid=tr.reid,
             color_upper=tr.color_upper,
             color_lower=tr.color_lower,
+            plan_pos=tr.plan_pos,
         )
 
-    def _match_score(self, tr: _LiveTrack, seg: Tracklet) -> Optional[float]:
+    def _match_score_explained(
+        self, tr: _LiveTrack, seg: Tracklet
+    ) -> Tuple[Optional[float], str]:
+        """Score + human-readable reason. None means 'association rejected'.
+
+        Decision chain for a cross-camera (handover) candidate:
+          1. state / geometry gates (overlap, topology edge, min_time rule);
+          2. spatial feasibility (BEV): reject if the plan distance between the
+             track's last position and the new segment's entry position cannot
+             be covered within the temporal gap at bev_max_speed;
+          3. appearance (ReID + color + time [+ BEV distance similarity]) must
+             pass the min_sim gate.
+        """
         if tr.state == TrackState.DIED:
-            return None
+            return None, "track_dead"
         if tr.state not in (
             TrackState.UNCONFIDENT,
             TrackState.CONFIDENT,
             TrackState.LOST,
         ):
-            return None
+            return None, "bad_state"
         if not self._track_can_accept(tr, seg):
-            return None
+            return None, "same_cam_overlap"
+
         last_cam = tr.segments[-1].camera_id if tr.segments else ""
-        if last_cam and last_cam != seg.camera_id and self.transitions:
+        cross_cam = bool(last_cam) and last_cam != seg.camera_id
+        edge = None
+        if cross_cam and self.transitions:
             edge = self.transitions.get((last_cam, seg.camera_id))
-            if edge is not None and float(edge.min_time) > 0.0 and tr.state != TrackState.LOST:
-                return None
+            if edge is None:
+                return None, "no_topology_edge"
+            if float(edge.min_time) > 0.0 and tr.state != TrackState.LOST:
+                # Cameras do not share a person at once: only a LOST track may
+                # reappear in a blind-zone camera.
+                return None, "edge_min_time_requires_lost"
+
+        # Explicit BEV feasibility gate (also enforced inside _similarity).
+        if cross_cam and self.projectors and tr.plan_pos is not None:
+            seg_pos = self._seg_plan_pos(seg)
+            if seg_pos is not None:
+                gap = max(0.0, float(seg.t_start) - tr.coverage_end)
+                if self._bev_term(tr.plan_pos, seg_pos, gap, edge) <= 0.0:
+                    return None, "bev_infeasible"
+
         best = -1.0
         seen = set()
         for s in reversed(tr.segments):
@@ -296,8 +425,21 @@ class GlobalTracker:
             if len(seen) >= 4:
                 break
         if best < self.min_sim:
-            return None
-        return float(best)
+            return None, "below_min_sim"
+        return float(best), "ok"
+
+    def _match_score(self, tr: _LiveTrack, seg: Tracklet) -> Optional[float]:
+        score, reason = self._match_score_explained(tr, seg)
+        if self.debug:
+            self.decision_log.append(
+                {
+                    "seg": (seg.camera_id, seg.local_id, float(seg.t_start)),
+                    "track_state": tr.state.value,
+                    "score": score,
+                    "reason": reason,
+                }
+            )
+        return score
 
     def _assign_segments(self, segs: List[Tracklet], live: List[_LiveTrack]) -> None:
         if not segs:
@@ -374,6 +516,8 @@ class GlobalTracker:
             color_lower=np.asarray(seg.color_lower, dtype=np.float64),
             coverage_end=float(seg.t_end),
             t_start=float(seg.t_start),
+            plan_pos=self._seg_plan_pos(seg),
+            plan_cam=seg.camera_id,
         )
         self._try_confirm(tr)
         return tr
@@ -387,6 +531,20 @@ class GlobalTracker:
         )
         tr.color_upper = (tr.color_upper * (n - 1) + seg.color_upper) / n
         tr.color_lower = (tr.color_lower * (n - 1) + seg.color_lower) / n
+
+        # Update the BEV anchor: light smoothing when the same camera keeps
+        # reporting (reduces homography jitter), direct takeover on handover.
+        pos = self._seg_plan_pos(seg)
+        if pos is not None:
+            if tr.plan_pos is not None and tr.plan_cam == seg.camera_id:
+                tr.plan_pos = (
+                    0.5 * tr.plan_pos[0] + 0.5 * pos[0],
+                    0.5 * tr.plan_pos[1] + 0.5 * pos[1],
+                )
+            else:
+                tr.plan_pos = pos
+            tr.plan_cam = seg.camera_id
+
         if tr.state == TrackState.LOST:
             tr.state = TrackState.CONFIDENT
         self._try_confirm(tr)
@@ -409,6 +567,12 @@ class GlobalTracker:
                 "local_id": s.local_id,
                 "t_start": s.t_start,
                 "t_end": s.t_end,
+                # BEV position of the segment, if it could be resolved:
+                **(
+                    {"plan_x": float(p[0]), "plan_y": float(p[1])}
+                    if (p := self._seg_plan_pos(s)) is not None
+                    else {}
+                ),
             }
             for s in tr.segments
         ]
@@ -425,10 +589,6 @@ class GlobalTracker:
     # --- legacy batch clustering (optional) ---
 
     def _track_legacy(self, tracklets: List[Tracklet]) -> List[GlobalTrack]:
-        from collections import defaultdict
-        from scipy.cluster.hierarchy import fcluster, linkage
-        from scipy.spatial.distance import squareform
-
         if self.method == "legacy_greedy":
             clusters = self._greedy_match(tracklets)
         else:
@@ -564,6 +724,11 @@ class GlobalTracker:
                 "local_id": s.local_id,
                 "t_start": s.t_start,
                 "t_end": s.t_end,
+                **(
+                    {"plan_x": float(p[0]), "plan_y": float(p[1])}
+                    if (p := self._seg_plan_pos(s)) is not None
+                    else {}
+                ),
             }
             for s in segments
         ]
