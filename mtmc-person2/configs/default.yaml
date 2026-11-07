@@ -33,7 +33,7 @@ tracklet:
 
 # --- NEW: mirror reflection filter ---
 mirror_filter:
-  enabled: false          # set true when a real projector is available
+  enabled: true         # set true when a real projector is available
   mirror_margin: 0.25     # meters
 
 output:

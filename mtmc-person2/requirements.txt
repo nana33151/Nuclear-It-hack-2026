@@ -5,3 +5,4 @@ numpy>=1.26
 # torchvision
 # timm
 # opencv-python
+plotly>=5.20
