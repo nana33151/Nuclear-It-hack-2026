@@ -100,6 +100,10 @@ def run(cfg: dict[str, Any]) -> dict[str, Any]:
             frame_rate=int(round(fps)),
             min_frames=int(mot_cfg.get("min_frames", 2)),
             n_init=int(mot_cfg.get("n_init", 3)),
+            reid_weight=float(mot_cfg.get("reid_weight", 0.45)),
+            split_reid_thresh=float(mot_cfg.get("split_reid_thresh", 0.45)),
+            stitch_min_sim=float(mot_cfg.get("stitch_min_sim", 0.6)),
+            stitch_max_gap=float(mot_cfg.get("stitch_max_gap", 8.0)),
         )
         print(f"  tracklets={len(tracklets)} from {len(dets)} detections / {n_frames} frames")
         all_tracklets.extend(tracklets)

@@ -3,9 +3,11 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from enum import Enum
+from itertools import groupby
 from typing import Dict, List, Optional, Tuple
 
 import numpy as np
+from scipy.optimize import linear_sum_assignment
 from scipy.spatial.distance import cosine
 
 
@@ -82,6 +84,7 @@ class GlobalTracker:
         min_hits: int = 2,
         min_confirm_sec: float = 0.4,
         lost_priority_margin: float = 0.02,
+        unique_margin: float = 0.05,
     ):
         self.T = T
         self.min_sim = min_sim
@@ -104,6 +107,7 @@ class GlobalTracker:
         self.min_hits = max(1, int(min_hits))
         self.min_confirm_sec = float(min_confirm_sec)
         self.lost_priority_margin = float(lost_priority_margin)
+        self.unique_margin = float(unique_margin)
         self.next_id = 1
 
     def _color_dist(self, c1: np.ndarray, c2: np.ndarray) -> float:
@@ -134,17 +138,16 @@ class GlobalTracker:
 
         gap = self._temporal_gap(a, b)
         cross_cam = a.camera_id != b.camera_id
-        edge_weight = 1.0
 
         if cross_cam and self.transitions:
             edge = self.transitions.get((a.camera_id, b.camera_id))
             if edge is None:
                 return 0.0
-            if gap < float(edge.min_time) or gap > float(edge.max_time):
+            # min_time>0 ⇒ cameras do not share a person at once (travel / blind zone).
+            if gap > float(edge.max_time) or gap < float(edge.min_time):
                 return 0.0
             max_t = max(float(edge.max_time), 1e-6)
             time_sim = np.exp(-gap / max_t)
-            edge_weight = float(edge.weight)
         else:
             if gap > self.max_transition_time:
                 return 0.0
@@ -159,7 +162,8 @@ class GlobalTracker:
             + self.w_color * color_sim
             + self.w_time * time_sim
         ) / (self.w_reid + self.w_color + self.w_time)
-        return float(max(0.0, min(1.0, appearance * edge_weight)))
+        # Topology weight only ranks Hungarian cost; do not scale the min_sim gate.
+        return float(max(0.0, min(1.0, appearance)))
 
     def _same_cam_overlap(self, a: Tracklet, b: Tracklet) -> bool:
         if a.camera_id != b.camera_id:
@@ -179,22 +183,35 @@ class GlobalTracker:
             return self._track_legacy(tracklets)
         return self._track_lifecycle(tracklets)
 
+    def _max_lost_timeout(self) -> float:
+        edge_caps = [float(e.max_time) for e in self.transitions.values()]
+        return max(
+            [float(self.T), float(self.max_transition_time), *edge_caps],
+            default=float(self.T),
+        )
+
+    def _lost_timeout(self, tr: _LiveTrack) -> float:
+        last_cam = tr.segments[-1].camera_id if tr.segments else ""
+        outgoing = [
+            float(e.max_time)
+            for (src, _dst), e in self.transitions.items()
+            if src == last_cam
+        ]
+        cross = max(outgoing) if outgoing else float(self.max_transition_time)
+        return max(float(self.T), cross)
+
     def _track_lifecycle(self, tracklets: List[Tracklet]) -> List[GlobalTrack]:
         live: List[_LiveTrack] = []
         closed: List[GlobalTrack] = []
 
-        for seg in tracklets:
-            now = float(seg.t_start)
+        for _t0, group in groupby(tracklets, key=lambda s: float(s.t_start)):
+            segs = list(group)
+            now = float(segs[0].t_start)
             self._on_tick(live, closed, now)
-            match = self._best_match(seg, live)
-            if match is not None:
-                self._attach_segment(match, seg)
-            else:
-                tr = self._spawn_unconfident(seg)
-                live.append(tr)
+            self._assign_segments(segs, live)
 
         timeline_end = max(float(s.t_end) for s in tracklets)
-        self._on_tick(live, closed, timeline_end + self.T + 1.0)
+        self._on_tick(live, closed, timeline_end + self._max_lost_timeout() + 1.0)
         for tr in list(live):
             if tr.state == TrackState.DIED:
                 continue
@@ -217,14 +234,17 @@ class GlobalTracker:
         for tr in live:
             if tr.state == TrackState.DIED:
                 continue
-            if tr.track_id is None and tr.state == TrackState.UNCONFIDENT:
+            if tr.state == TrackState.UNCONFIDENT:
+                if tr.coverage_end > 0 and (now - tr.coverage_end) > self.T:
+                    tr.state = TrackState.DIED
+                    tr.close_reason = "never_confirmed"
                 continue
 
             if tr.coverage_end > 0 and now > tr.coverage_end:
                 if tr.state == TrackState.CONFIDENT:
                     tr.state = TrackState.LOST
 
-            if tr.state == TrackState.LOST and (now - tr.coverage_end) > self.T:
+            if tr.state == TrackState.LOST and (now - tr.coverage_end) > self._lost_timeout(tr):
                 tr.state = TrackState.DIED
                 tr.close_reason = "gap_exceeded"
                 if tr.track_id is not None:
@@ -238,10 +258,10 @@ class GlobalTracker:
             return False
         return True
 
-    def _prototype(self, tr: _LiveTrack) -> Tracklet:
+    def _prototype(self, tr: _LiveTrack, camera_id: Optional[str] = None) -> Tracklet:
         last = tr.segments[-1]
         return Tracklet(
-            camera_id=last.camera_id,
+            camera_id=camera_id or last.camera_id,
             local_id=last.local_id,
             t_start=tr.t_start,
             t_end=tr.coverage_end,
@@ -250,18 +270,89 @@ class GlobalTracker:
             color_lower=tr.color_lower,
         )
 
+    def _match_score(self, tr: _LiveTrack, seg: Tracklet) -> Optional[float]:
+        if tr.state == TrackState.DIED:
+            return None
+        if tr.state not in (
+            TrackState.UNCONFIDENT,
+            TrackState.CONFIDENT,
+            TrackState.LOST,
+        ):
+            return None
+        if not self._track_can_accept(tr, seg):
+            return None
+        last_cam = tr.segments[-1].camera_id if tr.segments else ""
+        if last_cam and last_cam != seg.camera_id and self.transitions:
+            edge = self.transitions.get((last_cam, seg.camera_id))
+            if edge is not None and float(edge.min_time) > 0.0 and tr.state != TrackState.LOST:
+                return None
+        best = -1.0
+        seen = set()
+        for s in reversed(tr.segments):
+            if s.camera_id in seen:
+                continue
+            seen.add(s.camera_id)
+            best = max(best, self._similarity(self._prototype(tr, s.camera_id), seg))
+            if len(seen) >= 4:
+                break
+        if best < self.min_sim:
+            return None
+        return float(best)
+
+    def _assign_segments(self, segs: List[Tracklet], live: List[_LiveTrack]) -> None:
+        if not segs:
+            return
+        if not live:
+            for seg in segs:
+                live.append(self._spawn_unconfident(seg))
+            return
+
+        n, m = len(segs), len(live)
+        cost = np.full((n, m), 1e3, dtype=np.float64)
+        ok = np.zeros((n, m), dtype=bool)
+        for i, seg in enumerate(segs):
+            for j, tr in enumerate(live):
+                sim = self._match_score(tr, seg)
+                if sim is None:
+                    continue
+                c = 1.0 - sim
+                src = tr.segments[-1].camera_id if tr.segments else ""
+                if src != seg.camera_id and self.transitions:
+                    edge = self.transitions.get((src, seg.camera_id))
+                    w = float(edge.weight) if edge is not None else 1.0
+                    c = c / max(w, 0.05)
+                if tr.state == TrackState.LOST:
+                    c = max(0.0, c - self.lost_priority_margin)
+                cost[i, j] = c
+                ok[i, j] = True
+
+        for i in range(n):
+            ranked = sorted(
+                ((1.0 - float(cost[i, j]), j) for j in range(m) if ok[i, j]),
+                reverse=True,
+            )
+            if len(ranked) >= 2 and (ranked[0][0] - ranked[1][0]) < self.unique_margin:
+                for j in range(m):
+                    ok[i, j] = False
+                    cost[i, j] = 1e3
+
+        rows, cols = linear_sum_assignment(cost)
+        taken = set()
+        for i, j in zip(rows, cols):
+            if not ok[i, j]:
+                continue
+            self._attach_segment(live[j], segs[i])
+            taken.add(int(i))
+        for i, seg in enumerate(segs):
+            if i not in taken:
+                live.append(self._spawn_unconfident(seg))
+
     def _best_match(self, seg: Tracklet, live: List[_LiveTrack]) -> Optional[_LiveTrack]:
         best: Optional[_LiveTrack] = None
         best_sim = -1.0
         for tr in live:
-            if tr.state not in (TrackState.CONFIDENT, TrackState.LOST):
-                continue
-            if tr.track_id is None:
-                continue
-            if not self._track_can_accept(tr, seg):
-                continue
-            sim = self._similarity(self._prototype(tr), seg)
-            if sim < self.min_sim:
+            sim = self._match_score(tr, seg)
+            if sim is None:
                 continue
             prefer = (
                 best is not None

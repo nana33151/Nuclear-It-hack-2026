@@ -22,6 +22,10 @@ mot:
   match_thresh: 0.8
   n_init: 3
   min_frames: 3
+  reid_weight: 0.45      # mix appearance into ByteTrack cost (0 = IoU only)
+  split_reid_thresh: 0.45
+  stitch_min_sim: 0.6
+  stitch_max_gap: 8.0
 
 # ReID: solider (Swin-S Market) or color (mean RGB fallback)
 reid:

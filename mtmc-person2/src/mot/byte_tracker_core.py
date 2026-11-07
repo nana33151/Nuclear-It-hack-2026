@@ -19,6 +19,7 @@ class _STrack:
     is_activated: bool = False
     time_since_update: int = 0
     hits: int = 0
+    feat: list[float] | None = None
 
 
 @dataclass
@@ -28,6 +29,8 @@ class BYTETracker:
     match_thresh: float = 0.8
     frame_rate: int = 30
     n_init: int = 3
+    reid_weight: float = 0.45
+    reid_gate: float = 0.7
     frame_id: int = 0
     _next_id: int = 1
     tracked: list[_STrack] = field(default_factory=list)
@@ -37,28 +40,41 @@ class BYTETracker:
         self.max_time_lost = max(1, int(self.frame_rate / 30.0 * self.track_buffer))
         self.det_thresh = self.track_thresh + 0.1
 
-    def update(self, dets_xyxy_score: list[list[float]]) -> list[_STrack]:
-        """dets: each [x1,y1,x2,y2,score]. Returns activated tracks for this frame."""
+    def update(
+        self,
+        dets_xyxy_score: list[list[float]],
+        feats: list[list[float] | None] | None = None,
+    ) -> list[_STrack]:
+        """dets: each [x1,y1,x2,y2,score]. Optional L2 ReID feats aligned with dets."""
         self.frame_id += 1
         scores = [d[4] for d in dets_xyxy_score]
         bboxes = [d[:4] for d in dets_xyxy_score]
+        if feats is None or len(feats) != len(dets_xyxy_score):
+            feats = [None] * len(dets_xyxy_score)
 
         high, low = [], []
-        for bb, sc in zip(bboxes, scores):
+        for bb, sc, feat in zip(bboxes, scores, feats):
+            row = (bb, sc, _l2_list(feat))
             if sc >= self.track_thresh:
-                high.append((bb, sc))
+                high.append(row)
             elif sc > 0.1:
-                low.append((bb, sc))
+                low.append(row)
 
-        detections = [_STrack(0, list(bb), sc) for bb, sc in high]
-        detections_low = [_STrack(0, list(bb), sc) for bb, sc in low]
+        detections = [_STrack(0, list(bb), sc, feat=feat) for bb, sc, feat in high]
+        detections_low = [_STrack(0, list(bb), sc, feat=feat) for bb, sc, feat in low]
 
         tracked = [t for t in self.tracked if t.state == "tracked"]
         unconfirmed = [t for t in self.tracked if not t.is_activated]
         tracked = [t for t in tracked if t.is_activated]
 
         strack_pool = tracked + self.lost
-        matches, u_tracks, u_dets = _associate(strack_pool, detections, self.match_thresh)
+        matches, u_tracks, u_dets = _associate(
+            strack_pool,
+            detections,
+            self.match_thresh,
+            reid_weight=self.reid_weight,
+            reid_gate=self.reid_gate,
+        )
 
         activated, refound, lost_now = [], [], []
 
@@ -74,7 +90,13 @@ class BYTETracker:
 
         # Second association with low-score dets
         r_tracked = [strack_pool[i] for i in u_tracks if strack_pool[i].state == "tracked"]
-        matches2, u_tracks2, _ = _associate(r_tracked, detections_low, 0.5)
+        matches2, u_tracks2, _ = _associate(
+            r_tracked,
+            detections_low,
+            0.5,
+            reid_weight=self.reid_weight,
+            reid_gate=self.reid_gate,
+        )
         for it, idet in matches2:
             track = r_tracked[it]
             det = detections_low[idet]
@@ -88,7 +110,13 @@ class BYTETracker:
 
         # Unconfirmed
         detections_left = [detections[i] for i in u_dets]
-        matches_u, u_unconf, u_det_left = _associate(unconfirmed, detections_left, 0.7)
+        matches_u, u_unconf, u_det_left = _associate(
+            unconfirmed,
+            detections_left,
+            0.7,
+            reid_weight=self.reid_weight,
+            reid_gate=self.reid_gate,
+        )
         for it, idet in matches_u:
             tr = unconfirmed[it]
             _update_track(tr, detections_left[idet], self.frame_id, n_init=self.n_init)
@@ -110,6 +138,7 @@ class BYTETracker:
             det.start_frame = self.frame_id
             det.time_since_update = 0
             det.hits = 1
+            det.feat = _l2_list(det.feat)
             activated.append(det)
 
         # Age lost tracks
@@ -143,8 +172,55 @@ def _iou(a: list[float], b: list[float]) -> float:
     return inter / denom if denom > 0 else 0.0
 
 
+def _l2_list(vec: list[float] | None) -> list[float] | None:
+    if not vec:
+        return None
+    n = sum(x * x for x in vec) ** 0.5
+    if n <= 1e-12:
+        return list(vec)
+    return [x / n for x in vec]
+
+
+def _cos_dist(a: list[float] | None, b: list[float] | None) -> float | None:
+    if a is None or b is None or len(a) != len(b):
+        return None
+    return max(0.0, 1.0 - sum(x * y for x, y in zip(a, b)))
+
+
+def _pair_cost(
+    track: _STrack,
+    det: _STrack,
+    *,
+    reid_weight: float,
+    reid_gate: float,
+) -> float:
+    iou_cost = 1.0 - _iou(track.tlbr, det.tlbr)
+    app = _cos_dist(track.feat, det.feat)
+    if app is None or reid_weight <= 0.0:
+        return iou_cost
+    if app > reid_gate:
+        return 1.0
+    w = min(0.75, reid_weight + (0.2 if track.state == "lost" else 0.0))
+    return (1.0 - w) * iou_cost + w * app
+
+
+def _ema_feat(old: list[float] | None, new: list[float] | None, alpha: float = 0.9) -> list[float] | None:
+    new_n = _l2_list(new)
+    if new_n is None:
+        return old
+    if old is None or len(old) != len(new_n):
+        return new_n
+    mixed = [alpha * o + (1.0 - alpha) * n for o, n in zip(old, new_n)]
+    return _l2_list(mixed)
+
+
 def _associate(
-    tracks: list[_STrack], dets: list[_STrack], thresh: float
+    tracks: list[_STrack],
+    dets: list[_STrack],
+    thresh: float,
+    *,
+    reid_weight: float = 0.0,
+    reid_gate: float = 0.7,
 ) -> tuple[list[tuple[int, int]], list[int], list[int]]:
     if not tracks or not dets:
         return [], list(range(len(tracks))), list(range(len(dets)))
@@ -152,7 +228,7 @@ def _associate(
     pairs: list[tuple[float, int, int]] = []
     for ti, tr in enumerate(tracks):
         for di, det in enumerate(dets):
-            cost = 1.0 - _iou(tr.tlbr, det.tlbr)
+            cost = _pair_cost(tr, det, reid_weight=reid_weight, reid_gate=reid_gate)
             pairs.append((cost, ti, di))
     pairs.sort()
 
@@ -177,6 +253,7 @@ def _update_track(track: _STrack, det: _STrack, frame_id: int, *, n_init: int = 
     track.score = det.score
     track.state = "tracked"
     track.hits = int(track.hits) + 1
+    track.feat = _ema_feat(track.feat, det.feat)
     if track.hits >= max(1, int(n_init)):
         track.is_activated = True
     track.frame_id = frame_id

@@ -19,5 +19,6 @@ def build_mot(backend: str, **kwargs: Any):
             track_buffer=int(kwargs.get("track_buffer", 30)),
             match_thresh=float(kwargs.get("match_thresh", 0.8)),
             frame_rate=int(kwargs.get("frame_rate", 25)),
+            reid_weight=float(kwargs.get("reid_weight", 0.45)),
         )
     raise ValueError(f"Unknown MOT backend: {backend}")

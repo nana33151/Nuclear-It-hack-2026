@@ -9,6 +9,8 @@
 - [x] Резка по дисперсии (`smoke_split.py`)
 - [x] Смоук: 117 det → 2 tracklets, оба с reid_emb
 - [x] SOLIDER inference: `app/reid_solider.py` + `weights/swin_s_market.pth` + vendored `third_party/SOLIDER-REID`
+- [x] ByteTrack association uses ReID (not IoU-only); empty sampled frames age lost tracks
+- [x] Same-cam split/stitch by ReID in `app/local_track.py`
 
 ## Next
 

@@ -15,6 +15,7 @@ class ByteTrackMot:
         n_init: int = 3,
         match_thresh: float = 0.8,
         frame_rate: int = 25,
+        reid_weight: float = 0.45,
         **_: object,
     ) -> None:
         self.track_thresh = float(track_thresh)
@@ -22,6 +23,7 @@ class ByteTrackMot:
         self.match_thresh = float(match_thresh)
         self.frame_rate = int(frame_rate)
         self.n_init = int(n_init)
+        self.reid_weight = float(reid_weight)
 
     def track(self, detections: list[Detection]) -> list[RawTrack]:
         if not detections:
@@ -40,6 +42,7 @@ class ByteTrackMot:
             match_thresh=self.match_thresh,
             frame_rate=self.frame_rate,
             n_init=self.n_init,
+            reid_weight=float(getattr(self, "reid_weight", 0.45)),
         )
 
         # local_id -> list[Detection]
@@ -49,7 +52,8 @@ class ByteTrackMot:
         for frame_idx in range(frame_min, frame_max + 1):
             frame_dets = by_frame.get(frame_idx, [])
             arr = [list(d.bbox) + [d.score] for d in frame_dets]
-            online = tracker.update(arr)
+            feats = [list(d.color_top) + list(d.color_bottom) if d.color_top and d.color_bottom else None for d in frame_dets]
+            online = tracker.update(arr, feats)
             if not frame_dets or not online:
                 continue
 
