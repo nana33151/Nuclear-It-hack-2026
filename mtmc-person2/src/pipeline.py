@@ -20,17 +20,17 @@ from src.tracklets.split import split_by_reid_dispersion
 
 
 def load_config(path: str | Path) -> dict[str, Any]:
-    with Path(path).open(encoding="utf-8") as f:
+    with open(path, "r", encoding="utf-8") as f:
         return yaml.safe_load(f)
 
 
 def resolve_detections(cfg: dict[str, Any]):
     det_cfg = cfg["detections"]
-    source = det_cfg["source"]
+    source = det_cfg.get("source", "mock")
     if source == "mock":
-        mock = det_cfg.get("mock", {})
-        dets = make_mock_detections(**mock)
+        dets = make_mock_detections(**det_cfg.get("mock", {}))
         out = Path("data/input/mock_detections.jsonl")
+        out.parent.mkdir(parents=True, exist_ok=True)
         save_detections(dets, out)
         return dets, out
     if source in ("jsonl", "json", "file"):
@@ -41,6 +41,22 @@ def resolve_detections(cfg: dict[str, Any]):
 
 def run(cfg: dict[str, Any]):
     detections, source_path = resolve_detections(cfg)
+
+    # ---------- NEW: mirror filter ----------
+    mirror_cfg = cfg.get("mirror_filter", {})
+    if mirror_cfg.get("enabled", False):
+        from src.geometry import OfficeModel, filter_detections_by_mirror
+
+        office = OfficeModel(mirror_margin=float(mirror_cfg.get("mirror_margin", 0.25)))
+
+        # TODO: replace with real camera-to-floor projector when calibrations exist
+        def projector(det: dict):
+            x1, y1, x2, y2 = det["bbox"]
+            return (x1 + x2) / 2.0, y2
+
+        detections = filter_detections_by_mirror(detections, office, projector)
+    # ----------------------------------------
+
     mot_cfg = cfg.get("mot", {})
     mot = build_mot(
         mot_cfg.get("backend", "bytetrack"),
@@ -59,7 +75,7 @@ def run(cfg: dict[str, Any]):
             only_usable_for_reid=reid_cfg.get("only_usable_for_reid", True),
             device=reid_cfg.get("device"),
         )
-    embed_fn = (embedder.embed if embedder is not None else None)
+    embed_fn = embedder.embed if embedder is not None else None
 
     all_tracklets = []
     for camera_id, cam_dets in group_by_camera(detections).items():
