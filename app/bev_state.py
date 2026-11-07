@@ -56,7 +56,10 @@ def iter_bbox_events(
             except (TypeError, ValueError):
                 continue
             for item in items or []:
-                local_id = int(item.get("track_id", item.get("local_id", -1)))
+                local_id = item.get("local_id")
+                if local_id is None:
+                    local_id = item.get("track_id", -1)
+                local_id = int(local_id)
                 if local_id < 0:
                     continue
                 gid = mapping.get((cam, local_id))
@@ -175,7 +178,13 @@ def bboxes_for_cam_at(
     mapping = build_local_to_global(tracks_doc)
     out: list[dict] = []
     for it in best_items:
-        local_id = int(it.get("track_id", it.get("local_id", -1)))
+        # После патча 1 поле local_id есть прямо в overlay.
+        local_id = it.get("local_id")
+        if local_id is None:
+            # Backward-compat для старых overlays.json: без local_id маппинг
+            # по track_id верен только когда global == local (совпадает у части треков).
+            local_id = it.get("track_id", -1)
+        local_id = int(local_id)
         gid = mapping.get((cam, local_id))
         out.append({**it, "local_id": local_id, "global_id": gid})
     return out

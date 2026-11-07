@@ -9,6 +9,8 @@ import numpy as np
 from app.local_track import LocalTracklet
 from app.paths import ensure_import_paths, load_global_tracker_cls
 
+from app.projectors_loader import load_projectors        # NEW
+import json, os          
 
 def parse_transitions_from_cfg(
     merge_cfg: dict[str, Any] | None,
@@ -63,12 +65,22 @@ def to_global_tracks(
     merge_cfg: dict[str, Any] | None = None,
     min_hits: int = 2,
     min_confirm_sec: float = 0.4,
+    lost_timeout_sec: float | None = None,
+    enable_bev: bool = True,                             # NEW
+    debug: bool = False,                                 # NEW
+    debug_path: str | None = None,                       # NEW
 ) -> list[dict[str, Any]]:
     GlobalTracker, Tracklet, _ = load_global_tracker_cls()
     if transitions is None and merge_cfg is not None:
         transitions = parse_transitions_from_cfg(
             merge_cfg, default_max_time=max_transition_time
         )
+
+    projectors: dict = {}
+    if enable_bev:
+        cams = {t.camera_id for t in tracklets}
+        projectors = load_projectors(cams)               # {} если камеры не мапятся
+
     gt_tracklets = [
         Tracklet(
             camera_id=t.camera_id,
@@ -90,8 +102,18 @@ def to_global_tracks(
         method=method,
         min_hits=min_hits,
         min_confirm_sec=min_confirm_sec,
+        lost_timeout_sec=lost_timeout_sec,
+        projectors=projectors,                           # NEW
+        debug=debug,                                     # NEW
     )
     tracks = tracker.track(gt_tracklets)
+
+    if debug and debug_path and getattr(tracker, "decision_log", None):
+        try:
+            with open(debug_path, "w", encoding="utf-8") as f:
+                json.dump(tracker.decision_log, f, ensure_ascii=False, indent=2)
+        except Exception as exc:
+            print(f"[warn] decision_log write failed: {exc}")
 
     box_index: dict[tuple[str, int], list[dict]] = {
         (t.camera_id, t.local_id): t.boxes for t in tracklets
@@ -123,21 +145,22 @@ def to_global_tracks(
 
 
 def build_overlays(tracks: list[dict[str, Any]]) -> dict[str, dict[str, list[dict]]]:
-    """camera_id -> frame_idx(str) -> [{track_id, bbox, score}]."""
+    """camera_id -> frame_idx(str) -> [{track_id, local_id, bbox, score}]."""
     overlays: dict[str, dict[str, list[dict]]] = {}
     for tr in tracks:
         tid = tr["track_id"]
         for seg in tr["segments"]:
             cam = seg["camera_id"]
+            local_id = seg["local_id"]
             cam_map = overlays.setdefault(cam, {})
             for box in seg.get("boxes") or []:
                 key = str(int(box["frame_idx"]))
-                cam_map.setdefault(key, []).append(
-                    {
-                        "track_id": tid,
-                        "bbox": box["bbox"],
-                        "score": box.get("score", 1.0),
-                        "timestamp": box.get("timestamp"),
-                    }
-                )
+                cam_map.setdefault(key, []).append({
+                    "track_id": tid,
+                    "local_id": local_id,            # NEW
+                    "camera_id": cam,                # NEW
+                    "bbox": box["bbox"],
+                    "score": box.get("score", 1.0),
+                    "timestamp": box.get("timestamp"),
+                })
     return overlays

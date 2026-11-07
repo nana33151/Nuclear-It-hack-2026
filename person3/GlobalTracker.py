@@ -110,7 +110,8 @@ class GlobalTracker:
         bev_max_speed: float = 3.0,        # m/s, hard reject above this speed
         bev_sigma_scale: float = 2.0,      # sigma = scale * typical_speed * travel_time
         bev_min_travel: float = 0.25,      # s, floor for the travel-time window
-        debug: bool = False,               # collect per-decision reasons
+        debug: bool = False,   
+        lost_timeout_sec: Optional[float] = None,            # collect per-decision reasons
     ):
         self.T = T
         self.min_sim = min_sim
@@ -144,6 +145,9 @@ class GlobalTracker:
         self.min_confirm_sec = float(min_confirm_sec)
         self.lost_priority_margin = float(lost_priority_margin)
         self.unique_margin = float(unique_margin)
+        self.lost_timeout_sec = (
+            None if lost_timeout_sec is None else float(lost_timeout_sec)
+        )
         self.next_id = 1
 
     # ------------------------------------------------------------------
@@ -157,7 +161,15 @@ class GlobalTracker:
         proj = self.projectors.get(seg.camera_id)
         if proj is None or not seg.boxes:
             return None
-        x, y = proj.bbox_bottom_center_to_plan(seg.boxes[-1])
+
+        last = seg.boxes[-1]
+        # app/local_track.py stores boxes as dicts; person2 contract uses lists.
+        if isinstance(last, dict):
+            last = last.get("bbox")
+        if not last or len(last) < 4:
+            return None
+
+        x, y = proj.bbox_bottom_center_to_plan(last)
         return (float(x), float(y))
 
     def _bev_term(
@@ -277,6 +289,8 @@ class GlobalTracker:
         )
 
     def _lost_timeout(self, tr: _LiveTrack) -> float:
+        if self.lost_timeout_sec is not None:
+            return max(0.0, self.lost_timeout_sec)
         last_cam = tr.segments[-1].camera_id if tr.segments else ""
         outgoing = [
             float(e.max_time)

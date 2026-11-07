@@ -5,7 +5,7 @@ cameras: null  # null = all *.mkv/*.mp4 in video_dir; or list of stems
 
 model: person1/models/yolo11s-seg.pt
 device: auto
-imgsz: 640
+imgsz: 1024
 confidence: 0.55
 iou: 0.7
 
@@ -18,13 +18,13 @@ export_mp4: true   # write output/videos/{camera}.mp4 with boxes + IDs
 
 mot:
   track_thresh: 0.4
-  track_buffer: 30
-  match_thresh: 0.8
+  track_buffer: 15
+  match_thresh: 0.7
   n_init: 3
   min_frames: 3
-  reid_weight: 0.45      # mix appearance into ByteTrack cost (0 = IoU only)
+  reid_weight: 0.7     # mix appearance into ByteTrack cost (0 = IoU only)
   split_reid_thresh: 0.45
-  stitch_min_sim: 0.6
+  stitch_min_sim: 0.45
   stitch_max_gap: 8.0
 
 # ReID: solider (Swin-S Market) or color (mean RGB fallback)
@@ -37,24 +37,28 @@ reid:
   device: auto
 
 merge:
+  enable_bev: true
+  debug: true
+  debug_path: output/tracker_decisions.json
   T: 8.0
   min_sim: 0.55
   max_transition_time: 12.0
   method: lifecycle
   min_hits: 2
   min_confirm_sec: 0.2
+  lost_timeout_sec: 10.0 
   # Directed transitions: from_cam -> to_cam {min_time, max_time, weight}
   transitions:
     camera_new_1:
       camera_new_2: { min_time: 0.0, max_time: 8.0, weight: 1.0 }
     camera_new_2:
       camera_new_1: { min_time: 0.0, max_time: 8.0, weight: 1.0 }
-      camera_new_3: { min_time: 4.0, max_time: 25.0, weight: 0.35 }
+      camera_new_3: { min_time: 0.0, max_time: 25.0, weight: 0.35 }
     camera_new_3:
       camera_new_5: { min_time: 0.0, max_time: 10.0, weight: 1.0 }
       camera_new_4: { min_time: 0.0, max_time: 8.0, weight: 0.55 }
-      camera_new_1: { min_time: 4.0, max_time: 25.0, weight: 0.35 }
-      camera_new_2: { min_time: 4.0, max_time: 25.0, weight: 0.35 }
+      camera_new_1: { min_time: 0.0, max_time: 25.0, weight: 0.35 }
+      camera_new_2: { min_time: 0.0, max_time: 25.0, weight: 0.35 }
     camera_new_5:
       camera_new_3: { min_time: 0.0, max_time: 10.0, weight: 1.0 }
       camera_new_4: { min_time: 0.0, max_time: 8.0, weight: 0.55 }

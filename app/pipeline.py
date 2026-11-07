@@ -114,6 +114,13 @@ def run(cfg: dict[str, Any]) -> dict[str, Any]:
             "n_tracklets": len(tracklets),
         }
 
+    
+    out_dir = ROOT / cfg.get("output_dir", "output")
+    out_dir.mkdir(parents=True, exist_ok=True)
+    tracks_path = out_dir / cfg.get("tracks_name", "tracks.json")
+    overlays_path = out_dir / cfg.get("overlays_name", "overlays.json")
+
+
     merge_cfg = cfg.get("merge", {})
     max_tt = float(merge_cfg.get("max_transition_time", 20.0))
     tracks = to_global_tracks(
@@ -125,13 +132,13 @@ def run(cfg: dict[str, Any]) -> dict[str, Any]:
         merge_cfg=merge_cfg,
         min_hits=int(merge_cfg.get("min_hits", 2)),
         min_confirm_sec=float(merge_cfg.get("min_confirm_sec", 0.4)),
+        lost_timeout_sec=merge_cfg.get("lost_timeout_sec"),
+        enable_bev=bool(merge_cfg.get("enable_bev", True)),      # NEW
+        debug=bool(merge_cfg.get("debug", False)),               # NEW
+        debug_path=str(out_dir / "tracker_decisions.json"),      # NEW
     )
-    overlays = build_overlays(tracks)
 
-    out_dir = ROOT / cfg.get("output_dir", "output")
-    out_dir.mkdir(parents=True, exist_ok=True)
-    tracks_path = out_dir / cfg.get("tracks_name", "tracks.json")
-    overlays_path = out_dir / cfg.get("overlays_name", "overlays.json")
+    overlays = build_overlays(tracks)
 
     # Drop heavy boxes from tracks.json segments for readability; overlays keep them.
     tracks_light = []
