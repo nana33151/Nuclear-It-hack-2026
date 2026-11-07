@@ -1,0 +1,132 @@
+[
+  {
+    "seg": [
+      "camera_new_3",
+      1,
+      177.6
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_3",
+      1,
+      177.6
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_3",
+      2,
+      178.4
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_3",
+      2,
+      178.4
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_3",
+      2,
+      178.4
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "same_cam_overlap"
+  },
+  {
+    "seg": [
+      "camera_new_2",
+      3,
+      188.2
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "same_cam_overlap"
+  },
+  {
+    "seg": [
+      "camera_new_2",
+      3,
+      188.2
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "same_cam_overlap"
+  },
+  {
+    "seg": [
+      "camera_new_2",
+      3,
+      188.2
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_2",
+      3,
+      188.2
+    ],
+    "track_state": "confident",
+    "score": 0.9130939678151735,
+    "reason": "ok"
+  },
+  {
+    "seg": [
+      "camera_new_2",
+      4,
+      188.8
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "same_cam_overlap"
+  },
+  {
+    "seg": [
+      "camera_new_2",
+      4,
+      188.8
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "same_cam_overlap"
+  },
+  {
+    "seg": [
+      "camera_new_2",
+      4,
+      188.8
+    ],
+    "track_state": "confident",
+    "score": 0.8569818366275359,
+    "reason": "ok"
+  },
+  {
+    "seg": [
+      "camera_new_2",
+      4,
+      188.8
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "same_cam_overlap"
+  }
+]
