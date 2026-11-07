@@ -32,10 +32,6 @@ class BYTETracker:
     _next_id: int = 1
     tracked: list[_STrack] = field(default_factory=list)
     lost: list[_STrack] = field(default_factory=list)
-    # debug counters (hypothesis A: ID burn on unconfirmed)
-    _dbg_born: int = 0
-    _dbg_removed_unconf: int = 0
-    _dbg_activated: int = 0
 
     def __post_init__(self) -> None:
         self.max_time_lost = max(1, int(self.frame_rate / 30.0 * self.track_buffer))
@@ -100,7 +96,6 @@ class BYTETracker:
             activated.append(tr)
         for it in u_unconf:
             unconfirmed[it].state = "removed"
-            self._dbg_removed_unconf += 1
 
         # New tracks
         for inew in u_det_left:
@@ -109,7 +104,6 @@ class BYTETracker:
                 continue
             det.track_id = self._next_id
             self._next_id += 1
-            self._dbg_born += 1
             det.state = "tracked"
             det.is_activated = False
             det.frame_id = self.frame_id
@@ -131,9 +125,6 @@ class BYTETracker:
 
         for t in self.tracked:
             t.time_since_update = 0
-            if getattr(t, "_just_activated", False):
-                self._dbg_activated += 1
-                t._just_activated = False  # type: ignore[attr-defined]
         return [t for t in self.tracked if t.is_activated]
 
 
@@ -186,13 +177,10 @@ def _update_track(track: _STrack, det: _STrack, frame_id: int, *, n_init: int = 
     track.score = det.score
     track.state = "tracked"
     track.hits = int(track.hits) + 1
-    was_act = track.is_activated
     if track.hits >= max(1, int(n_init)):
         track.is_activated = True
-    # activation edge counted by caller via tracker ref if needed
     track.frame_id = frame_id
     track.time_since_update = 0
-    track._just_activated = (not was_act) and track.is_activated  # type: ignore[attr-defined]
 
 
 def _reactivate(track: _STrack, det: _STrack, frame_id: int, *, n_init: int = 3) -> None:

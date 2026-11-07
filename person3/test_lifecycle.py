@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import numpy as np
 
-from GlobalTracker import GlobalTracker, Tracklet
+from GlobalTracker import GlobalTracker, Tracklet, TransitionEdge
 
 
 def _tl(
@@ -61,6 +61,40 @@ def test_gap_exceeds_T_new_id() -> None:
     assert all(tr.close_reason in ("gap_exceeded", "end_of_window") for tr in tracks)
 
 
+def test_transition_missing_edge_no_merge() -> None:
+    edges = {
+        ("cam_a", "cam_b"): TransitionEdge(0.0, 10.0, 1.0),
+    }
+    gt = GlobalTracker(
+        T=8.0,
+        min_sim=0.5,
+        min_hits=1,
+        min_confirm_sec=0.1,
+        transitions=edges,
+    )
+    a = _same_person("cam_a", 1, 0.0, 2.0)
+    b = _same_person("cam_c", 2, 3.0, 5.0)
+    tracks = gt.track([a, b])
+    assert len(tracks) == 2, tracks
+
+
+def test_transition_gap_outside_window() -> None:
+    edges = {
+        ("cam_a", "cam_b"): TransitionEdge(min_time=5.0, max_time=10.0, weight=1.0),
+    }
+    gt = GlobalTracker(
+        T=8.0,
+        min_sim=0.5,
+        min_hits=1,
+        min_confirm_sec=0.1,
+        transitions=edges,
+    )
+    a = _same_person("cam_a", 1, 0.0, 2.0)
+    b = _same_person("cam_b", 2, 5.0, 7.0)  # gap 3s < min_time 5
+    tracks = gt.track([a, b])
+    assert len(tracks) == 2, tracks
+
+
 def test_tracks_json_shape() -> None:
     gt = GlobalTracker()
     a = _same_person("cam_a", 1, 0.0, 5.0)
@@ -78,5 +112,7 @@ if __name__ == "__main__":
     test_short_flicker_no_global_id()
     test_lost_rejoin_same_id()
     test_gap_exceeds_T_new_id()
+    test_transition_missing_edge_no_merge()
+    test_transition_gap_outside_window()
     test_tracks_json_shape()
     print("ok: lifecycle smoke tests passed")

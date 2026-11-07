@@ -111,64 +111,18 @@ def run(cfg: dict[str, Any]) -> dict[str, Any]:
         }
 
     merge_cfg = cfg.get("merge", {})
+    max_tt = float(merge_cfg.get("max_transition_time", 20.0))
     tracks = to_global_tracks(
         all_tracklets,
         T=float(merge_cfg.get("T", 8.0)),
         min_sim=float(merge_cfg.get("min_sim", 0.45)),
-        max_transition_time=float(merge_cfg.get("max_transition_time", 20.0)),
+        max_transition_time=max_tt,
         method=str(merge_cfg.get("method", "lifecycle")),
-        topology=merge_cfg.get("topology") or {},
+        merge_cfg=merge_cfg,
         min_hits=int(merge_cfg.get("min_hits", 2)),
         min_confirm_sec=float(merge_cfg.get("min_confirm_sec", 0.4)),
     )
     overlays = build_overlays(tracks)
-    # #region agent log
-    try:
-        import time as _time
-        from pathlib import Path as _Path
-
-        _log = _Path(__file__).resolve().parents[1] / ".cursor" / "debug-9cc90d.log"
-        _two = []
-        for _cam, _frames in overlays.items():
-            for _fi, _items in _frames.items():
-                if len(_items) == 2:
-                    _tids = sorted(int(x["track_id"]) for x in _items)
-                    _two.append({"cam": _cam, "frame": int(_fi), "tids": _tids})
-                    if len(_two) >= 5:
-                        break
-            if len(_two) >= 5:
-                break
-        _durs = [
-            {
-                "id": int(tr["track_id"]),
-                "dur": round(float(tr["t_end"]) - float(tr["t_start"]), 2),
-                "cams": list(tr["cameras"]),
-            }
-            for tr in tracks
-        ]
-        with _log.open("a", encoding="utf-8") as _f:
-            _f.write(
-                __import__("json").dumps(
-                    {
-                        "sessionId": "9cc90d",
-                        "runId": "pre-fix",
-                        "hypothesisId": "B",
-                        "location": "app/pipeline.py:after_merge",
-                        "message": "global_id_gap_context",
-                        "data": {
-                            "n_tracks": len(tracks),
-                            "track_ids": [int(tr["track_id"]) for tr in tracks],
-                            "durations": _durs,
-                            "sample_two_box_frames": _two,
-                        },
-                        "timestamp": int(_time.time() * 1000),
-                    }
-                )
-                + "\n"
-            )
-    except Exception:
-        pass
-    # #endregion
 
     out_dir = ROOT / cfg.get("output_dir", "output")
     out_dir.mkdir(parents=True, exist_ok=True)

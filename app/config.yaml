@@ -39,13 +39,24 @@ merge:
   method: lifecycle
   min_hits: 2
   min_confirm_sec: 0.2
-  # Soft topology (empty = allow all cross-cam merges)
-  topology:
-    camera_new_1: [camera_new_2]
-    camera_new_2: [camera_new_1]
-    camera_new_3: [camera_new_5, camera_new_4]
-    camera_new_5: [camera_new_3, camera_new_4]
-    camera_new_4: []
+  # Directed transitions: from_cam -> to_cam {min_time, max_time, weight}
+  transitions:
+    camera_new_1:
+      camera_new_2: { min_time: 0.0, max_time: 8.0, weight: 1.0 }
+    camera_new_2:
+      camera_new_1: { min_time: 0.0, max_time: 8.0, weight: 1.0 }
+      camera_new_3: { min_time: 4.0, max_time: 25.0, weight: 0.35 }
+    camera_new_3:
+      camera_new_5: { min_time: 0.0, max_time: 10.0, weight: 1.0 }
+      camera_new_4: { min_time: 0.0, max_time: 8.0, weight: 0.55 }
+      camera_new_1: { min_time: 4.0, max_time: 25.0, weight: 0.35 }
+      camera_new_2: { min_time: 4.0, max_time: 25.0, weight: 0.35 }
+    camera_new_5:
+      camera_new_3: { min_time: 0.0, max_time: 10.0, weight: 1.0 }
+      camera_new_4: { min_time: 0.0, max_time: 8.0, weight: 0.55 }
+    camera_new_4:
+      camera_new_3: { min_time: 0.0, max_time: 10.0, weight: 1.0 }
+      camera_new_5: { min_time: 0.0, max_time: 10.0, weight: 1.0 }
 
 output_dir: output
 tracks_name: tracks.json

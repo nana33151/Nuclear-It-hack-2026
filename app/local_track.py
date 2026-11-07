@@ -104,40 +104,6 @@ def run_mot(
             used.add(best_i)
             histories[tr.track_id].append(frame_dets[best_i])
 
-    # #region agent log
-    try:
-        import json as _json, time as _time
-        from pathlib import Path as _Path
-
-        _log = _Path(__file__).resolve().parents[1] / ".cursor" / "debug-9cc90d.log"
-        _cam = detections[0].camera_id if detections else "?"
-        with _log.open("a", encoding="utf-8") as _f:
-            _f.write(
-                _json.dumps(
-                    {
-                        "sessionId": "9cc90d",
-                        "runId": "pre-fix",
-                        "hypothesisId": "A",
-                        "location": "app/local_track.py:run_mot",
-                        "message": "bytetrack_id_counters",
-                        "data": {
-                            "camera_id": _cam,
-                            "born": getattr(tracker, "_dbg_born", None),
-                            "removed_unconf": getattr(tracker, "_dbg_removed_unconf", None),
-                            "activated": getattr(tracker, "_dbg_activated", None),
-                            "next_id": getattr(tracker, "_next_id", None),
-                            "history_ids": sorted(histories.keys()),
-                            "n_histories": len(histories),
-                        },
-                        "timestamp": int(_time.time() * 1000),
-                    }
-                )
-                + "\n"
-            )
-    except Exception:
-        pass
-    # #endregion
-
     tracklets: list[LocalTracklet] = []
     for tid, dets in sorted(histories.items()):
         dets = sorted(dets, key=lambda d: d.frame_idx)

@@ -3,10 +3,17 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import List, Dict, Optional
+from typing import Dict, List, Optional, Tuple
 
 import numpy as np
 from scipy.spatial.distance import cosine
+
+
+@dataclass(frozen=True)
+class TransitionEdge:
+    min_time: float = 0.0
+    max_time: float = 12.0
+    weight: float = 1.0
 
 
 class TrackState(str, Enum):
@@ -69,6 +76,7 @@ class GlobalTracker:
         w_color: float = 0.3,
         w_time: float = 0.1,
         max_transition_time: float = 15.0,
+        transitions: Optional[Dict[Tuple[str, str], TransitionEdge]] = None,
         topology: Optional[Dict[str, List[str]]] = None,
         method: str = "lifecycle",  # lifecycle | legacy_greedy | legacy_average
         min_hits: int = 2,
@@ -81,7 +89,17 @@ class GlobalTracker:
         self.w_color = w_color
         self.w_time = w_time
         self.max_transition_time = max_transition_time
-        self.topology = topology or {}
+        self.transitions: Dict[Tuple[str, str], TransitionEdge] = dict(
+            transitions or {}
+        )
+        if not self.transitions and topology:
+            for src, dsts in topology.items():
+                for dst in dsts:
+                    self.transitions[(src, dst)] = TransitionEdge(
+                        min_time=0.0,
+                        max_time=float(max_transition_time),
+                        weight=1.0,
+                    )
         self.method = method
         self.min_hits = max(1, int(min_hits))
         self.min_confirm_sec = float(min_confirm_sec)
@@ -115,25 +133,33 @@ class GlobalTracker:
         color_sim = np.exp(-color_d)
 
         gap = self._temporal_gap(a, b)
-        if gap > self.max_transition_time:
-            return 0.0
-        time_sim = (
-            np.exp(-gap / self.max_transition_time)
-            if self.max_transition_time > 0
-            else 1.0
-        )
+        cross_cam = a.camera_id != b.camera_id
+        edge_weight = 1.0
 
-        if self.topology:
-            allowed = self.topology.get(a.camera_id, [])
-            if b.camera_id != a.camera_id and b.camera_id not in allowed:
+        if cross_cam and self.transitions:
+            edge = self.transitions.get((a.camera_id, b.camera_id))
+            if edge is None:
                 return 0.0
+            if gap < float(edge.min_time) or gap > float(edge.max_time):
+                return 0.0
+            max_t = max(float(edge.max_time), 1e-6)
+            time_sim = np.exp(-gap / max_t)
+            edge_weight = float(edge.weight)
+        else:
+            if gap > self.max_transition_time:
+                return 0.0
+            time_sim = (
+                np.exp(-gap / self.max_transition_time)
+                if self.max_transition_time > 0
+                else 1.0
+            )
 
-        sim = (
+        appearance = (
             self.w_reid * reid_sim
             + self.w_color * color_sim
             + self.w_time * time_sim
         ) / (self.w_reid + self.w_color + self.w_time)
-        return float(sim)
+        return float(max(0.0, min(1.0, appearance * edge_weight)))
 
     def _same_cam_overlap(self, a: Tracklet, b: Tracklet) -> bool:
         if a.camera_id != b.camera_id:
