@@ -65,6 +65,7 @@ def run_mot(
     match_thresh: float = 0.8,
     frame_rate: int = 25,
     min_frames: int = 2,
+    n_init: int = 3,
 ) -> list[LocalTracklet]:
     if not detections:
         return []
@@ -78,14 +79,16 @@ def run_mot(
         track_buffer=track_buffer,
         match_thresh=match_thresh,
         frame_rate=frame_rate,
+        n_init=n_init,
     )
     histories: dict[int, list[FrameDet]] = defaultdict(list)
-    fmin, fmax = min(by_frame), max(by_frame)
-    for frame_idx in range(fmin, fmax + 1):
-        frame_dets = by_frame.get(frame_idx, [])
+    # Only feed sampled detection frames. Pumping empty interstitial frames
+    # (e.g. stride=5) kills tentative tracks before n_init can confirm them.
+    for frame_idx in sorted(by_frame.keys()):
+        frame_dets = by_frame[frame_idx]
         arr = [list(d.bbox) + [d.score] for d in frame_dets]
         online = tracker.update(arr)
-        if not frame_dets or not online:
+        if not online:
             continue
         used: set[int] = set()
         for tr in online:
@@ -100,6 +103,40 @@ def run_mot(
                 continue
             used.add(best_i)
             histories[tr.track_id].append(frame_dets[best_i])
+
+    # #region agent log
+    try:
+        import json as _json, time as _time
+        from pathlib import Path as _Path
+
+        _log = _Path(__file__).resolve().parents[1] / ".cursor" / "debug-9cc90d.log"
+        _cam = detections[0].camera_id if detections else "?"
+        with _log.open("a", encoding="utf-8") as _f:
+            _f.write(
+                _json.dumps(
+                    {
+                        "sessionId": "9cc90d",
+                        "runId": "pre-fix",
+                        "hypothesisId": "A",
+                        "location": "app/local_track.py:run_mot",
+                        "message": "bytetrack_id_counters",
+                        "data": {
+                            "camera_id": _cam,
+                            "born": getattr(tracker, "_dbg_born", None),
+                            "removed_unconf": getattr(tracker, "_dbg_removed_unconf", None),
+                            "activated": getattr(tracker, "_dbg_activated", None),
+                            "next_id": getattr(tracker, "_next_id", None),
+                            "history_ids": sorted(histories.keys()),
+                            "n_histories": len(histories),
+                        },
+                        "timestamp": int(_time.time() * 1000),
+                    }
+                )
+                + "\n"
+            )
+    except Exception:
+        pass
+    # #endregion
 
     tracklets: list[LocalTracklet] = []
     for tid, dets in sorted(histories.items()):

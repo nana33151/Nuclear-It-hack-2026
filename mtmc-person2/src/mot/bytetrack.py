@@ -12,6 +12,7 @@ class ByteTrackMot:
         self,
         track_thresh: float = 0.5,
         track_buffer: int = 30,
+        n_init: int = 3,
         match_thresh: float = 0.8,
         frame_rate: int = 25,
         **_: object,
@@ -20,6 +21,7 @@ class ByteTrackMot:
         self.track_buffer = int(track_buffer)
         self.match_thresh = float(match_thresh)
         self.frame_rate = int(frame_rate)
+        self.n_init = int(n_init)
 
     def track(self, detections: list[Detection]) -> list[RawTrack]:
         if not detections:
@@ -37,6 +39,7 @@ class ByteTrackMot:
             track_buffer=self.track_buffer,
             match_thresh=self.match_thresh,
             frame_rate=self.frame_rate,
+            n_init=self.n_init,
         )
 
         # local_id -> list[Detection]

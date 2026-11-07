@@ -1,3 +1,4 @@
+# Deprecated copy — use GlobalTracker.py (lifecycle method is the default).
 # global_tracker.py
 from __future__ import annotations
 from dataclasses import dataclass, field

@@ -18,6 +18,7 @@ class _STrack:
     start_frame: int = 0
     is_activated: bool = False
     time_since_update: int = 0
+    hits: int = 0
 
 
 @dataclass
@@ -26,10 +27,15 @@ class BYTETracker:
     track_buffer: int = 30
     match_thresh: float = 0.8
     frame_rate: int = 30
+    n_init: int = 3
     frame_id: int = 0
     _next_id: int = 1
     tracked: list[_STrack] = field(default_factory=list)
     lost: list[_STrack] = field(default_factory=list)
+    # debug counters (hypothesis A: ID burn on unconfirmed)
+    _dbg_born: int = 0
+    _dbg_removed_unconf: int = 0
+    _dbg_activated: int = 0
 
     def __post_init__(self) -> None:
         self.max_time_lost = max(1, int(self.frame_rate / 30.0 * self.track_buffer))
@@ -64,10 +70,10 @@ class BYTETracker:
             track = strack_pool[it]
             det = detections[idet]
             if track.state == "tracked":
-                _update_track(track, det, self.frame_id)
+                _update_track(track, det, self.frame_id, n_init=self.n_init)
                 activated.append(track)
             else:
-                _reactivate(track, det, self.frame_id)
+                _reactivate(track, det, self.frame_id, n_init=self.n_init)
                 refound.append(track)
 
         # Second association with low-score dets
@@ -76,7 +82,7 @@ class BYTETracker:
         for it, idet in matches2:
             track = r_tracked[it]
             det = detections_low[idet]
-            _update_track(track, det, self.frame_id)
+            _update_track(track, det, self.frame_id, n_init=self.n_init)
             activated.append(track)
         for it in u_tracks2:
             track = r_tracked[it]
@@ -88,10 +94,13 @@ class BYTETracker:
         detections_left = [detections[i] for i in u_dets]
         matches_u, u_unconf, u_det_left = _associate(unconfirmed, detections_left, 0.7)
         for it, idet in matches_u:
-            _update_track(unconfirmed[it], detections_left[idet], self.frame_id)
-            activated.append(unconfirmed[it])
+            tr = unconfirmed[it]
+            _update_track(tr, detections_left[idet], self.frame_id, n_init=self.n_init)
+            # Keep in self.tracked until activated; return from update() stays filtered.
+            activated.append(tr)
         for it in u_unconf:
             unconfirmed[it].state = "removed"
+            self._dbg_removed_unconf += 1
 
         # New tracks
         for inew in u_det_left:
@@ -100,11 +109,13 @@ class BYTETracker:
                 continue
             det.track_id = self._next_id
             self._next_id += 1
+            self._dbg_born += 1
             det.state = "tracked"
-            det.is_activated = self.frame_id == 1 or True
+            det.is_activated = False
             det.frame_id = self.frame_id
             det.start_frame = self.frame_id
             det.time_since_update = 0
+            det.hits = 1
             activated.append(det)
 
         # Age lost tracks
@@ -120,6 +131,9 @@ class BYTETracker:
 
         for t in self.tracked:
             t.time_since_update = 0
+            if getattr(t, "_just_activated", False):
+                self._dbg_activated += 1
+                t._just_activated = False  # type: ignore[attr-defined]
         return [t for t in self.tracked if t.is_activated]
 
 
@@ -167,14 +181,19 @@ def _associate(
     return matches, u_tracks, u_dets
 
 
-def _update_track(track: _STrack, det: _STrack, frame_id: int) -> None:
+def _update_track(track: _STrack, det: _STrack, frame_id: int, *, n_init: int = 3) -> None:
     track.tlbr = list(det.tlbr)
     track.score = det.score
     track.state = "tracked"
-    track.is_activated = True
+    track.hits = int(track.hits) + 1
+    was_act = track.is_activated
+    if track.hits >= max(1, int(n_init)):
+        track.is_activated = True
+    # activation edge counted by caller via tracker ref if needed
     track.frame_id = frame_id
     track.time_since_update = 0
+    track._just_activated = (not was_act) and track.is_activated  # type: ignore[attr-defined]
 
 
-def _reactivate(track: _STrack, det: _STrack, frame_id: int) -> None:
-    _update_track(track, det, frame_id)
+def _reactivate(track: _STrack, det: _STrack, frame_id: int, *, n_init: int = 3) -> None:
+    _update_track(track, det, frame_id, n_init=n_init)

@@ -16,8 +16,10 @@ def to_global_tracks(
     T: float = 8.0,
     min_sim: float = 0.45,
     max_transition_time: float = 20.0,
-    method: str = "greedy",
+    method: str = "lifecycle",
     topology: dict[str, list[str]] | None = None,
+    min_hits: int = 2,
+    min_confirm_sec: float = 0.4,
 ) -> list[dict[str, Any]]:
     GlobalTracker, Tracklet, _ = load_global_tracker_cls()
     gt_tracklets = [
@@ -39,6 +41,8 @@ def to_global_tracks(
         max_transition_time=max_transition_time,
         topology=topology or {},
         method=method,
+        min_hits=min_hits,
+        min_confirm_sec=min_confirm_sec,
     )
     tracks = tracker.track(gt_tracklets)
 
@@ -66,6 +70,7 @@ def to_global_tracks(
                 "cameras": list(tr.cameras),
                 "segments": segments,
                 "close_reason": tr.close_reason,
+                "state": getattr(tr, "state", "confident"),
             }
         )
     return result

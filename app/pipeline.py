@@ -91,12 +91,15 @@ def run(cfg: dict[str, Any]) -> dict[str, Any]:
             if n_frames % 20 == 0:
                 print(f"  frames={n_frames} dets_total={len(dets)}")
 
+        mot_cfg = cfg.get("mot") or {}
         tracklets = run_mot(
             dets,
-            track_thresh=float(cfg["mot"]["track_thresh"]),
-            track_buffer=int(cfg["mot"]["track_buffer"]),
-            match_thresh=float(cfg["mot"]["match_thresh"]),
+            track_thresh=float(mot_cfg.get("track_thresh", 0.4)),
+            track_buffer=int(mot_cfg.get("track_buffer", 30)),
+            match_thresh=float(mot_cfg.get("match_thresh", 0.8)),
             frame_rate=int(round(fps)),
+            min_frames=int(mot_cfg.get("min_frames", 2)),
+            n_init=int(mot_cfg.get("n_init", 3)),
         )
         print(f"  tracklets={len(tracklets)} from {len(dets)} detections / {n_frames} frames")
         all_tracklets.extend(tracklets)
@@ -113,10 +116,59 @@ def run(cfg: dict[str, Any]) -> dict[str, Any]:
         T=float(merge_cfg.get("T", 8.0)),
         min_sim=float(merge_cfg.get("min_sim", 0.45)),
         max_transition_time=float(merge_cfg.get("max_transition_time", 20.0)),
-        method=str(merge_cfg.get("method", "greedy")),
+        method=str(merge_cfg.get("method", "lifecycle")),
         topology=merge_cfg.get("topology") or {},
+        min_hits=int(merge_cfg.get("min_hits", 2)),
+        min_confirm_sec=float(merge_cfg.get("min_confirm_sec", 0.4)),
     )
     overlays = build_overlays(tracks)
+    # #region agent log
+    try:
+        import time as _time
+        from pathlib import Path as _Path
+
+        _log = _Path(__file__).resolve().parents[1] / ".cursor" / "debug-9cc90d.log"
+        _two = []
+        for _cam, _frames in overlays.items():
+            for _fi, _items in _frames.items():
+                if len(_items) == 2:
+                    _tids = sorted(int(x["track_id"]) for x in _items)
+                    _two.append({"cam": _cam, "frame": int(_fi), "tids": _tids})
+                    if len(_two) >= 5:
+                        break
+            if len(_two) >= 5:
+                break
+        _durs = [
+            {
+                "id": int(tr["track_id"]),
+                "dur": round(float(tr["t_end"]) - float(tr["t_start"]), 2),
+                "cams": list(tr["cameras"]),
+            }
+            for tr in tracks
+        ]
+        with _log.open("a", encoding="utf-8") as _f:
+            _f.write(
+                __import__("json").dumps(
+                    {
+                        "sessionId": "9cc90d",
+                        "runId": "pre-fix",
+                        "hypothesisId": "B",
+                        "location": "app/pipeline.py:after_merge",
+                        "message": "global_id_gap_context",
+                        "data": {
+                            "n_tracks": len(tracks),
+                            "track_ids": [int(tr["track_id"]) for tr in tracks],
+                            "durations": _durs,
+                            "sample_two_box_frames": _two,
+                        },
+                        "timestamp": int(_time.time() * 1000),
+                    }
+                )
+                + "\n"
+            )
+    except Exception:
+        pass
+    # #endregion
 
     out_dir = ROOT / cfg.get("output_dir", "output")
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -133,6 +185,7 @@ def run(cfg: dict[str, Any]) -> dict[str, Any]:
                 "t_end": tr["t_end"],
                 "cameras": tr["cameras"],
                 "close_reason": tr["close_reason"],
+                "state": tr.get("state", "confident"),
                 "segments": [
                     {
                         "camera_id": s["camera_id"],
