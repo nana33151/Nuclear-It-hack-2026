@@ -1,56 +1,316 @@
 {
-  "n_tracks": 4,
-  "n_cross_camera": 2,
+  "n_tracks": 25,
+  "n_cross_camera": 3,
   "reid": "solider",
   "window": {
-    "start_sec": 175.0,
-    "max_sec": 15.0,
-    "stride": 5
+    "start_sec": 150.0,
+    "max_sec": 60.0,
+    "stride": 10
   },
   "cameras": {
-    "camera_new_2": {
-      "path": "Video\\camera_new_2.mkv",
+    "camera_new_1": {
+      "path": "Video/camera_new_1.mkv",
       "fps": 25.0,
-      "n_detections_raw": 173,
-      "n_detections_dropped_by_mirror": 9,
-      "n_detections": 164,
+      "n_detections_raw": 125,
+      "n_detections_dropped_by_mirror": 0,
+      "n_detections": 125,
       "n_tracklets": 4,
-      "preview_mp4": "output\\videos\\camera_new_2.mp4"
+      "preview_mp4": "output/videos/camera_new_1.mp4"
+    },
+    "camera_new_2": {
+      "path": "Video/camera_new_2.mkv",
+      "fps": 25.0,
+      "n_detections_raw": 196,
+      "n_detections_dropped_by_mirror": 15,
+      "n_detections": 181,
+      "n_tracklets": 5,
+      "preview_mp4": "output/videos/camera_new_2.mp4"
     },
     "camera_new_3": {
-      "path": "Video\\camera_new_3.mkv",
+      "path": "Video/camera_new_3.mkv",
       "fps": 25.0,
-      "n_detections_raw": 121,
+      "n_detections_raw": 327,
       "n_detections_dropped_by_mirror": 0,
-      "n_detections": 121,
-      "n_tracklets": 2,
-      "preview_mp4": "output\\videos\\camera_new_3.mp4"
+      "n_detections": 327,
+      "n_tracklets": 5,
+      "preview_mp4": "output/videos/camera_new_3.mp4"
+    },
+    "camera_new_4": {
+      "path": "Video/camera_new_4.mkv",
+      "fps": 20.0,
+      "n_detections_raw": 77,
+      "n_detections_dropped_by_mirror": 0,
+      "n_detections": 77,
+      "n_tracklets": 6,
+      "preview_mp4": "output/videos/camera_new_4.mp4"
+    },
+    "camera_new_5": {
+      "path": "Video/camera_new_5.mkv",
+      "fps": 25.0,
+      "n_detections_raw": 210,
+      "n_detections_dropped_by_mirror": 0,
+      "n_detections": 210,
+      "n_tracklets": 8,
+      "preview_mp4": "output/videos/camera_new_5.mp4"
     }
   },
   "tracks": [
     {
       "track_id": 1,
-      "t_start": 175.4,
-      "t_end": 189.8,
+      "t_start": 150.8,
+      "t_end": 165.6,
       "cameras": [
-        "camera_new_2"
+        "camera_new_5"
       ],
       "close_reason": "gap_exceeded",
       "state": "died",
       "segments": [
         {
-          "camera_id": "camera_new_2",
-          "local_id": 1,
-          "t_start": 175.4,
-          "t_end": 189.8,
-          "n_boxes": 71
+          "camera_id": "camera_new_5",
+          "local_id": 2,
+          "t_start": 150.8,
+          "t_end": 165.6,
+          "n_boxes": 37
         }
       ]
     },
     {
       "track_id": 2,
-      "t_start": 175.4,
-      "t_end": 189.8,
+      "t_start": 150.8,
+      "t_end": 169.2,
+      "cameras": [
+        "camera_new_5"
+      ],
+      "close_reason": "gap_exceeded",
+      "state": "died",
+      "segments": [
+        {
+          "camera_id": "camera_new_5",
+          "local_id": 1,
+          "t_start": 150.8,
+          "t_end": 169.2,
+          "n_boxes": 43
+        }
+      ]
+    },
+    {
+      "track_id": 3,
+      "t_start": 150.8,
+      "t_end": 178.8,
+      "cameras": [
+        "camera_new_3"
+      ],
+      "close_reason": "gap_exceeded",
+      "state": "died",
+      "segments": [
+        {
+          "camera_id": "camera_new_3",
+          "local_id": 1,
+          "t_start": 150.8,
+          "t_end": 178.8,
+          "n_boxes": 54
+        }
+      ]
+    },
+    {
+      "track_id": 4,
+      "t_start": 150.8,
+      "t_end": 198.4,
+      "cameras": [
+        "camera_new_2",
+        "camera_new_3"
+      ],
+      "close_reason": "gap_exceeded",
+      "state": "died",
+      "segments": [
+        {
+          "camera_id": "camera_new_3",
+          "local_id": 2,
+          "t_start": 150.8,
+          "t_end": 163.6,
+          "n_boxes": 28
+        },
+        {
+          "camera_id": "camera_new_2",
+          "local_id": 1,
+          "t_start": 173.2,
+          "t_end": 198.4,
+          "n_boxes": 59
+        }
+      ]
+    },
+    {
+      "track_id": 5,
+      "t_start": 152.0,
+      "t_end": 180.5,
+      "cameras": [
+        "camera_new_4",
+        "camera_new_5"
+      ],
+      "close_reason": "gap_exceeded",
+      "state": "died",
+      "segments": [
+        {
+          "camera_id": "camera_new_5",
+          "local_id": 3,
+          "t_start": 152.0,
+          "t_end": 161.6,
+          "n_boxes": 22
+        },
+        {
+          "camera_id": "camera_new_4",
+          "local_id": 3,
+          "t_start": 163.0,
+          "t_end": 180.5,
+          "n_boxes": 27
+        }
+      ]
+    },
+    {
+      "track_id": 6,
+      "t_start": 152.0,
+      "t_end": 209.6,
+      "cameras": [
+        "camera_new_3"
+      ],
+      "close_reason": "gap_exceeded",
+      "state": "died",
+      "segments": [
+        {
+          "camera_id": "camera_new_3",
+          "local_id": 3,
+          "t_start": 152.0,
+          "t_end": 209.6,
+          "n_boxes": 105
+        }
+      ]
+    },
+    {
+      "track_id": 7,
+      "t_start": 153.6,
+      "t_end": 209.6,
+      "cameras": [
+        "camera_new_3",
+        "camera_new_4"
+      ],
+      "close_reason": "gap_exceeded",
+      "state": "died",
+      "segments": [
+        {
+          "camera_id": "camera_new_3",
+          "local_id": 4,
+          "t_start": 153.6,
+          "t_end": 209.6,
+          "n_boxes": 117
+        },
+        {
+          "camera_id": "camera_new_4",
+          "local_id": 6,
+          "t_start": 208.0,
+          "t_end": 209.5,
+          "n_boxes": 4
+        }
+      ]
+    },
+    {
+      "track_id": 8,
+      "t_start": 157.6,
+      "t_end": 168.4,
+      "cameras": [
+        "camera_new_5"
+      ],
+      "close_reason": "gap_exceeded",
+      "state": "died",
+      "segments": [
+        {
+          "camera_id": "camera_new_5",
+          "local_id": 4,
+          "t_start": 157.6,
+          "t_end": 168.4,
+          "n_boxes": 22
+        }
+      ]
+    },
+    {
+      "track_id": 9,
+      "t_start": 160.4,
+      "t_end": 161.6,
+      "cameras": [
+        "camera_new_3"
+      ],
+      "close_reason": "gap_exceeded",
+      "state": "died",
+      "segments": [
+        {
+          "camera_id": "camera_new_3",
+          "local_id": 5,
+          "t_start": 160.4,
+          "t_end": 161.6,
+          "n_boxes": 4
+        }
+      ]
+    },
+    {
+      "track_id": 10,
+      "t_start": 161.0,
+      "t_end": 165.0,
+      "cameras": [
+        "camera_new_4"
+      ],
+      "close_reason": "gap_exceeded",
+      "state": "died",
+      "segments": [
+        {
+          "camera_id": "camera_new_4",
+          "local_id": 1,
+          "t_start": 161.0,
+          "t_end": 165.0,
+          "n_boxes": 9
+        }
+      ]
+    },
+    {
+      "track_id": 11,
+      "t_start": 162.5,
+      "t_end": 164.5,
+      "cameras": [
+        "camera_new_4"
+      ],
+      "close_reason": "gap_exceeded",
+      "state": "died",
+      "segments": [
+        {
+          "camera_id": "camera_new_4",
+          "local_id": 2,
+          "t_start": 162.5,
+          "t_end": 164.5,
+          "n_boxes": 5
+        }
+      ]
+    },
+    {
+      "track_id": 12,
+      "t_start": 163.0,
+      "t_end": 165.5,
+      "cameras": [
+        "camera_new_4"
+      ],
+      "close_reason": "gap_exceeded",
+      "state": "died",
+      "segments": [
+        {
+          "camera_id": "camera_new_4",
+          "local_id": 4,
+          "t_start": 163.0,
+          "t_end": 165.5,
+          "n_boxes": 4
+        }
+      ]
+    },
+    {
+      "track_id": 13,
+      "t_start": 174.0,
+      "t_end": 195.6,
       "cameras": [
         "camera_new_2"
       ],
@@ -60,63 +320,237 @@
         {
           "camera_id": "camera_new_2",
           "local_id": 2,
-          "t_start": 175.4,
-          "t_end": 189.8,
-          "n_boxes": 70
+          "t_start": 174.0,
+          "t_end": 195.6,
+          "n_boxes": 53
         }
       ]
     },
     {
-      "track_id": 3,
-      "t_start": 177.6,
-      "t_end": 189.8,
+      "track_id": 14,
+      "t_start": 175.0,
+      "t_end": 179.5,
       "cameras": [
-        "camera_new_2",
-        "camera_new_3"
+        "camera_new_4"
       ],
       "close_reason": "gap_exceeded",
       "state": "died",
       "segments": [
         {
-          "camera_id": "camera_new_3",
+          "camera_id": "camera_new_4",
+          "local_id": 5,
+          "t_start": 175.0,
+          "t_end": 179.5,
+          "n_boxes": 10
+        }
+      ]
+    },
+    {
+      "track_id": 15,
+      "t_start": 176.0,
+      "t_end": 198.4,
+      "cameras": [
+        "camera_new_1"
+      ],
+      "close_reason": "gap_exceeded",
+      "state": "died",
+      "segments": [
+        {
+          "camera_id": "camera_new_1",
           "local_id": 1,
-          "t_start": 177.6,
-          "t_end": 188.8,
-          "n_boxes": 57
-        },
-        {
-          "camera_id": "camera_new_2",
-          "local_id": 4,
-          "t_start": 188.8,
-          "t_end": 189.8,
-          "n_boxes": 6
+          "t_start": 176.0,
+          "t_end": 198.4,
+          "n_boxes": 49
         }
       ]
     },
     {
-      "track_id": 4,
-      "t_start": 178.4,
-      "t_end": 189.6,
+      "track_id": 16,
+      "t_start": 176.4,
+      "t_end": 198.0,
       "cameras": [
-        "camera_new_2",
-        "camera_new_3"
+        "camera_new_1"
       ],
       "close_reason": "gap_exceeded",
       "state": "died",
       "segments": [
         {
-          "camera_id": "camera_new_3",
+          "camera_id": "camera_new_1",
           "local_id": 2,
-          "t_start": 178.4,
-          "t_end": 189.4,
-          "n_boxes": 52
-        },
+          "t_start": 176.4,
+          "t_end": 198.0,
+          "n_boxes": 55
+        }
+      ]
+    },
+    {
+      "track_id": 17,
+      "t_start": 177.6,
+      "t_end": 182.0,
+      "cameras": [
+        "camera_new_5"
+      ],
+      "close_reason": "gap_exceeded",
+      "state": "died",
+      "segments": [
+        {
+          "camera_id": "camera_new_5",
+          "local_id": 5,
+          "t_start": 177.6,
+          "t_end": 182.0,
+          "n_boxes": 12
+        }
+      ]
+    },
+    {
+      "track_id": 18,
+      "t_start": 178.0,
+      "t_end": 182.4,
+      "cameras": [
+        "camera_new_5"
+      ],
+      "close_reason": "gap_exceeded",
+      "state": "died",
+      "segments": [
+        {
+          "camera_id": "camera_new_5",
+          "local_id": 6,
+          "t_start": 178.0,
+          "t_end": 182.4,
+          "n_boxes": 11
+        }
+      ]
+    },
+    {
+      "track_id": 19,
+      "t_start": 189.2,
+      "t_end": 198.8,
+      "cameras": [
+        "camera_new_2"
+      ],
+      "close_reason": "gap_exceeded",
+      "state": "died",
+      "segments": [
         {
           "camera_id": "camera_new_2",
           "local_id": 3,
-          "t_start": 188.2,
-          "t_end": 189.6,
+          "t_start": 189.2,
+          "t_end": 198.8,
+          "n_boxes": 23
+        }
+      ]
+    },
+    {
+      "track_id": 20,
+      "t_start": 189.6,
+      "t_end": 199.2,
+      "cameras": [
+        "camera_new_2"
+      ],
+      "close_reason": "gap_exceeded",
+      "state": "died",
+      "segments": [
+        {
+          "camera_id": "camera_new_2",
+          "local_id": 4,
+          "t_start": 189.6,
+          "t_end": 199.2,
+          "n_boxes": 23
+        }
+      ]
+    },
+    {
+      "track_id": 21,
+      "t_start": 192.4,
+      "t_end": 195.6,
+      "cameras": [
+        "camera_new_1"
+      ],
+      "close_reason": "gap_exceeded",
+      "state": "died",
+      "segments": [
+        {
+          "camera_id": "camera_new_1",
+          "local_id": 3,
+          "t_start": 192.4,
+          "t_end": 195.6,
+          "n_boxes": 5
+        }
+      ]
+    },
+    {
+      "track_id": 22,
+      "t_start": 192.4,
+      "t_end": 195.6,
+      "cameras": [
+        "camera_new_1"
+      ],
+      "close_reason": "gap_exceeded",
+      "state": "died",
+      "segments": [
+        {
+          "camera_id": "camera_new_1",
+          "local_id": 4,
+          "t_start": 192.4,
+          "t_end": 195.6,
           "n_boxes": 8
+        }
+      ]
+    },
+    {
+      "track_id": 23,
+      "t_start": 194.4,
+      "t_end": 197.6,
+      "cameras": [
+        "camera_new_2"
+      ],
+      "close_reason": "gap_exceeded",
+      "state": "died",
+      "segments": [
+        {
+          "camera_id": "camera_new_2",
+          "local_id": 5,
+          "t_start": 194.4,
+          "t_end": 197.6,
+          "n_boxes": 4
+        }
+      ]
+    },
+    {
+      "track_id": 24,
+      "t_start": 200.4,
+      "t_end": 209.6,
+      "cameras": [
+        "camera_new_5"
+      ],
+      "close_reason": "gap_exceeded",
+      "state": "died",
+      "segments": [
+        {
+          "camera_id": "camera_new_5",
+          "local_id": 7,
+          "t_start": 200.4,
+          "t_end": 209.6,
+          "n_boxes": 23
+        }
+      ]
+    },
+    {
+      "track_id": 25,
+      "t_start": 204.8,
+      "t_end": 209.6,
+      "cameras": [
+        "camera_new_5"
+      ],
+      "close_reason": "gap_exceeded",
+      "state": "died",
+      "segments": [
+        {
+          "camera_id": "camera_new_5",
+          "local_id": 8,
+          "t_start": 204.8,
+          "t_end": 209.6,
+          "n_boxes": 12
         }
       ]
     }

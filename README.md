@@ -7,6 +7,7 @@
 ### 2. Клонирование и окружение
 Распакуйте архив SOLIDER - это ReID модель и ее веса - он ждет вас на диске https://drive.google.com/drive/folders/1z7bkaUkUyJsUFcrJDotyzNJ1t_-WqR6w?usp=sharing
 
+
 ```bash
 git clone <repo>
 cd Nuclear-It-hack-2026
@@ -46,6 +47,8 @@ python -m app.pipeline --start-sec 175 --max-sec 15 --stride 5 \
 - `--cameras ...` — только указанные камеры
 - `--stride N` — каждый N-й кадр
 
+
+Для изменения остальных параметров запуска используйте app/config.yaml
 
 
 

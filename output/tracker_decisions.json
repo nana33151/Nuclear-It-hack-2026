@@ -1,8 +1,1398 @@
 [
   {
     "seg": [
+      "camera_new_5",
+      3,
+      152.0
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_5",
+      3,
+      152.0
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "same_cam_overlap"
+  },
+  {
+    "seg": [
+      "camera_new_5",
+      3,
+      152.0
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "same_cam_overlap"
+  },
+  {
+    "seg": [
+      "camera_new_5",
+      3,
+      152.0
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
       "camera_new_3",
+      3,
+      152.0
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "same_cam_overlap"
+  },
+  {
+    "seg": [
+      "camera_new_3",
+      3,
+      152.0
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_3",
+      3,
+      152.0
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_3",
+      3,
+      152.0
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "same_cam_overlap"
+  },
+  {
+    "seg": [
+      "camera_new_3",
+      4,
+      153.6
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "same_cam_overlap"
+  },
+  {
+    "seg": [
+      "camera_new_3",
+      4,
+      153.6
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_3",
+      4,
+      153.6
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_3",
+      4,
+      153.6
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "same_cam_overlap"
+  },
+  {
+    "seg": [
+      "camera_new_3",
+      4,
+      153.6
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_3",
+      4,
+      153.6
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "same_cam_overlap"
+  },
+  {
+    "seg": [
+      "camera_new_5",
+      4,
+      157.6
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_5",
+      4,
+      157.6
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "same_cam_overlap"
+  },
+  {
+    "seg": [
+      "camera_new_5",
+      4,
+      157.6
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "same_cam_overlap"
+  },
+  {
+    "seg": [
+      "camera_new_5",
+      4,
+      157.6
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_5",
+      4,
+      157.6
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "same_cam_overlap"
+  },
+  {
+    "seg": [
+      "camera_new_5",
+      4,
+      157.6
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_5",
+      4,
+      157.6
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_3",
+      5,
+      160.4
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "same_cam_overlap"
+  },
+  {
+    "seg": [
+      "camera_new_3",
+      5,
+      160.4
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_3",
+      5,
+      160.4
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_3",
+      5,
+      160.4
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "same_cam_overlap"
+  },
+  {
+    "seg": [
+      "camera_new_3",
+      5,
+      160.4
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_3",
+      5,
+      160.4
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "same_cam_overlap"
+  },
+  {
+    "seg": [
+      "camera_new_3",
+      5,
+      160.4
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "same_cam_overlap"
+  },
+  {
+    "seg": [
+      "camera_new_3",
+      5,
+      160.4
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_4",
       1,
+      161.0
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_4",
+      1,
+      161.0
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_4",
+      1,
+      161.0
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_4",
+      1,
+      161.0
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_4",
+      1,
+      161.0
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_4",
+      1,
+      161.0
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_4",
+      1,
+      161.0
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_4",
+      1,
+      161.0
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_4",
+      1,
+      161.0
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_4",
+      2,
+      162.5
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_4",
+      2,
+      162.5
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_4",
+      2,
+      162.5
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_4",
+      2,
+      162.5
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_4",
+      2,
+      162.5
+    ],
+    "track_state": "lost",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_4",
+      2,
+      162.5
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_4",
+      2,
+      162.5
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_4",
+      2,
+      162.5
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_4",
+      2,
+      162.5
+    ],
+    "track_state": "lost",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_4",
+      2,
+      162.5
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "same_cam_overlap"
+  },
+  {
+    "seg": [
+      "camera_new_4",
+      4,
+      163.0
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_4",
+      4,
+      163.0
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_4",
+      4,
+      163.0
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_4",
+      4,
+      163.0
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_4",
+      4,
+      163.0
+    ],
+    "track_state": "lost",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_4",
+      4,
+      163.0
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_4",
+      4,
+      163.0
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_4",
+      4,
+      163.0
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_4",
+      4,
+      163.0
+    ],
+    "track_state": "lost",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_4",
+      4,
+      163.0
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "same_cam_overlap"
+  },
+  {
+    "seg": [
+      "camera_new_4",
+      4,
+      163.0
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "same_cam_overlap"
+  },
+  {
+    "seg": [
+      "camera_new_4",
+      3,
+      163.0
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_4",
+      3,
+      163.0
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_4",
+      3,
+      163.0
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_4",
+      3,
+      163.0
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_4",
+      3,
+      163.0
+    ],
+    "track_state": "lost",
+    "score": 0.9122016764116065,
+    "reason": "ok"
+  },
+  {
+    "seg": [
+      "camera_new_4",
+      3,
+      163.0
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_4",
+      3,
+      163.0
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_4",
+      3,
+      163.0
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_4",
+      3,
+      163.0
+    ],
+    "track_state": "lost",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_4",
+      3,
+      163.0
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "same_cam_overlap"
+  },
+  {
+    "seg": [
+      "camera_new_4",
+      3,
+      163.0
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "same_cam_overlap"
+  },
+  {
+    "seg": [
+      "camera_new_2",
+      1,
+      173.2
+    ],
+    "track_state": "lost",
+    "score": 0.9171621836206748,
+    "reason": "ok"
+  },
+  {
+    "seg": [
+      "camera_new_2",
+      1,
+      173.2
+    ],
+    "track_state": "lost",
+    "score": null,
+    "reason": "no_topology_edge"
+  },
+  {
+    "seg": [
+      "camera_new_2",
+      1,
+      173.2
+    ],
+    "track_state": "lost",
+    "score": null,
+    "reason": "no_topology_edge"
+  },
+  {
+    "seg": [
+      "camera_new_2",
+      1,
+      173.2
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_2",
+      1,
+      173.2
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "no_topology_edge"
+  },
+  {
+    "seg": [
+      "camera_new_2",
+      1,
+      173.2
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_2",
+      1,
+      173.2
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_2",
+      1,
+      173.2
+    ],
+    "track_state": "lost",
+    "score": null,
+    "reason": "no_topology_edge"
+  },
+  {
+    "seg": [
+      "camera_new_2",
+      1,
+      173.2
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_2",
+      1,
+      173.2
+    ],
+    "track_state": "lost",
+    "score": null,
+    "reason": "no_topology_edge"
+  },
+  {
+    "seg": [
+      "camera_new_2",
+      1,
+      173.2
+    ],
+    "track_state": "lost",
+    "score": null,
+    "reason": "no_topology_edge"
+  },
+  {
+    "seg": [
+      "camera_new_2",
+      1,
+      173.2
+    ],
+    "track_state": "lost",
+    "score": null,
+    "reason": "no_topology_edge"
+  },
+  {
+    "seg": [
+      "camera_new_2",
+      2,
+      174.0
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "same_cam_overlap"
+  },
+  {
+    "seg": [
+      "camera_new_2",
+      2,
+      174.0
+    ],
+    "track_state": "lost",
+    "score": null,
+    "reason": "no_topology_edge"
+  },
+  {
+    "seg": [
+      "camera_new_2",
+      2,
+      174.0
+    ],
+    "track_state": "lost",
+    "score": null,
+    "reason": "no_topology_edge"
+  },
+  {
+    "seg": [
+      "camera_new_2",
+      2,
+      174.0
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_2",
+      2,
+      174.0
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "no_topology_edge"
+  },
+  {
+    "seg": [
+      "camera_new_2",
+      2,
+      174.0
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_2",
+      2,
+      174.0
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_2",
+      2,
+      174.0
+    ],
+    "track_state": "lost",
+    "score": null,
+    "reason": "no_topology_edge"
+  },
+  {
+    "seg": [
+      "camera_new_2",
+      2,
+      174.0
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_2",
+      2,
+      174.0
+    ],
+    "track_state": "lost",
+    "score": null,
+    "reason": "no_topology_edge"
+  },
+  {
+    "seg": [
+      "camera_new_2",
+      2,
+      174.0
+    ],
+    "track_state": "lost",
+    "score": null,
+    "reason": "no_topology_edge"
+  },
+  {
+    "seg": [
+      "camera_new_2",
+      2,
+      174.0
+    ],
+    "track_state": "lost",
+    "score": null,
+    "reason": "no_topology_edge"
+  },
+  {
+    "seg": [
+      "camera_new_4",
+      5,
+      175.0
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "no_topology_edge"
+  },
+  {
+    "seg": [
+      "camera_new_4",
+      5,
+      175.0
+    ],
+    "track_state": "lost",
+    "score": null,
+    "reason": "below_min_sim"
+  },
+  {
+    "seg": [
+      "camera_new_4",
+      5,
+      175.0
+    ],
+    "track_state": "lost",
+    "score": 0.939794380493292,
+    "reason": "ok"
+  },
+  {
+    "seg": [
+      "camera_new_4",
+      5,
+      175.0
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_4",
+      5,
+      175.0
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "same_cam_overlap"
+  },
+  {
+    "seg": [
+      "camera_new_4",
+      5,
+      175.0
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_4",
+      5,
+      175.0
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_4",
+      5,
+      175.0
+    ],
+    "track_state": "lost",
+    "score": 0.895388790852665,
+    "reason": "ok"
+  },
+  {
+    "seg": [
+      "camera_new_4",
+      5,
+      175.0
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_4",
+      5,
+      175.0
+    ],
+    "track_state": "lost",
+    "score": 0.8405294433414884,
+    "reason": "ok"
+  },
+  {
+    "seg": [
+      "camera_new_4",
+      5,
+      175.0
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_4",
+      5,
+      175.0
+    ],
+    "track_state": "lost",
+    "score": 0.9220333434741359,
+    "reason": "ok"
+  },
+  {
+    "seg": [
+      "camera_new_4",
+      5,
+      175.0
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "no_topology_edge"
+  },
+  {
+    "seg": [
+      "camera_new_1",
+      1,
+      176.0
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_1",
+      1,
+      176.0
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_1",
+      1,
+      176.0
+    ],
+    "track_state": "lost",
+    "score": null,
+    "reason": "no_topology_edge"
+  },
+  {
+    "seg": [
+      "camera_new_1",
+      1,
+      176.0
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_1",
+      1,
+      176.0
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "no_topology_edge"
+  },
+  {
+    "seg": [
+      "camera_new_1",
+      1,
+      176.0
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_1",
+      1,
+      176.0
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_1",
+      1,
+      176.0
+    ],
+    "track_state": "lost",
+    "score": null,
+    "reason": "no_topology_edge"
+  },
+  {
+    "seg": [
+      "camera_new_1",
+      1,
+      176.0
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_1",
+      1,
+      176.0
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_1",
+      1,
+      176.0
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_1",
+      1,
+      176.0
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_1",
+      1,
+      176.0
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_1",
+      1,
+      176.0
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "no_topology_edge"
+  },
+  {
+    "seg": [
+      "camera_new_1",
+      2,
+      176.4
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_1",
+      2,
+      176.4
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_1",
+      2,
+      176.4
+    ],
+    "track_state": "lost",
+    "score": null,
+    "reason": "no_topology_edge"
+  },
+  {
+    "seg": [
+      "camera_new_1",
+      2,
+      176.4
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_1",
+      2,
+      176.4
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "no_topology_edge"
+  },
+  {
+    "seg": [
+      "camera_new_1",
+      2,
+      176.4
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_1",
+      2,
+      176.4
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_1",
+      2,
+      176.4
+    ],
+    "track_state": "lost",
+    "score": null,
+    "reason": "no_topology_edge"
+  },
+  {
+    "seg": [
+      "camera_new_1",
+      2,
+      176.4
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_1",
+      2,
+      176.4
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_1",
+      2,
+      176.4
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_1",
+      2,
+      176.4
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_1",
+      2,
+      176.4
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_1",
+      2,
+      176.4
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "no_topology_edge"
+  },
+  {
+    "seg": [
+      "camera_new_1",
+      2,
+      176.4
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "same_cam_overlap"
+  },
+  {
+    "seg": [
+      "camera_new_5",
+      5,
+      177.6
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "no_topology_edge"
+  },
+  {
+    "seg": [
+      "camera_new_5",
+      5,
+      177.6
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_5",
+      5,
+      177.6
+    ],
+    "track_state": "lost",
+    "score": 0.8912088282478942,
+    "reason": "ok"
+  },
+  {
+    "seg": [
+      "camera_new_5",
+      5,
       177.6
     ],
     "track_state": "confident",
@@ -11,8 +1401,8 @@
   },
   {
     "seg": [
-      "camera_new_3",
-      1,
+      "camera_new_5",
+      5,
       177.6
     ],
     "track_state": "confident",
@@ -21,9 +1411,9 @@
   },
   {
     "seg": [
-      "camera_new_3",
-      2,
-      178.4
+      "camera_new_5",
+      5,
+      177.6
     ],
     "track_state": "confident",
     "score": null,
@@ -31,9 +1421,9 @@
   },
   {
     "seg": [
-      "camera_new_3",
-      2,
-      178.4
+      "camera_new_5",
+      5,
+      177.6
     ],
     "track_state": "confident",
     "score": null,
@@ -41,92 +1431,1972 @@
   },
   {
     "seg": [
-      "camera_new_3",
-      2,
-      178.4
+      "camera_new_5",
+      5,
+      177.6
     ],
-    "track_state": "confident",
-    "score": null,
-    "reason": "same_cam_overlap"
-  },
-  {
-    "seg": [
-      "camera_new_2",
-      3,
-      188.2
-    ],
-    "track_state": "confident",
-    "score": null,
-    "reason": "same_cam_overlap"
-  },
-  {
-    "seg": [
-      "camera_new_2",
-      3,
-      188.2
-    ],
-    "track_state": "confident",
-    "score": null,
-    "reason": "same_cam_overlap"
-  },
-  {
-    "seg": [
-      "camera_new_2",
-      3,
-      188.2
-    ],
-    "track_state": "confident",
-    "score": null,
-    "reason": "bev_infeasible"
-  },
-  {
-    "seg": [
-      "camera_new_2",
-      3,
-      188.2
-    ],
-    "track_state": "confident",
-    "score": 0.9130939678151735,
+    "track_state": "lost",
+    "score": 0.8576663230881207,
     "reason": "ok"
   },
   {
     "seg": [
-      "camera_new_2",
-      4,
-      188.8
+      "camera_new_5",
+      5,
+      177.6
     ],
-    "track_state": "confident",
+    "track_state": "died",
     "score": null,
-    "reason": "same_cam_overlap"
+    "reason": "track_dead"
   },
   {
     "seg": [
-      "camera_new_2",
-      4,
-      188.8
+      "camera_new_5",
+      5,
+      177.6
     ],
-    "track_state": "confident",
+    "track_state": "died",
     "score": null,
-    "reason": "same_cam_overlap"
+    "reason": "track_dead"
   },
   {
     "seg": [
-      "camera_new_2",
-      4,
-      188.8
+      "camera_new_5",
+      5,
+      177.6
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_5",
+      5,
+      177.6
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_5",
+      5,
+      177.6
     ],
     "track_state": "confident",
-    "score": 0.8569818366275359,
+    "score": null,
+    "reason": "no_topology_edge"
+  },
+  {
+    "seg": [
+      "camera_new_5",
+      5,
+      177.6
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_5",
+      5,
+      177.6
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "no_topology_edge"
+  },
+  {
+    "seg": [
+      "camera_new_5",
+      5,
+      177.6
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "no_topology_edge"
+  },
+  {
+    "seg": [
+      "camera_new_5",
+      6,
+      178.0
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "no_topology_edge"
+  },
+  {
+    "seg": [
+      "camera_new_5",
+      6,
+      178.0
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_5",
+      6,
+      178.0
+    ],
+    "track_state": "lost",
+    "score": 0.8699149486062658,
     "reason": "ok"
   },
   {
     "seg": [
-      "camera_new_2",
-      4,
-      188.8
+      "camera_new_5",
+      6,
+      178.0
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_5",
+      6,
+      178.0
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_5",
+      6,
+      178.0
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_5",
+      6,
+      178.0
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_5",
+      6,
+      178.0
+    ],
+    "track_state": "lost",
+    "score": 0.9067668084878446,
+    "reason": "ok"
+  },
+  {
+    "seg": [
+      "camera_new_5",
+      6,
+      178.0
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_5",
+      6,
+      178.0
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_5",
+      6,
+      178.0
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_5",
+      6,
+      178.0
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_5",
+      6,
+      178.0
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "no_topology_edge"
+  },
+  {
+    "seg": [
+      "camera_new_5",
+      6,
+      178.0
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_5",
+      6,
+      178.0
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "no_topology_edge"
+  },
+  {
+    "seg": [
+      "camera_new_5",
+      6,
+      178.0
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "no_topology_edge"
+  },
+  {
+    "seg": [
+      "camera_new_5",
+      6,
+      178.0
     ],
     "track_state": "confident",
     "score": null,
     "reason": "same_cam_overlap"
+  },
+  {
+    "seg": [
+      "camera_new_2",
+      3,
+      189.2
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "same_cam_overlap"
+  },
+  {
+    "seg": [
+      "camera_new_2",
+      3,
+      189.2
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_2",
+      3,
+      189.2
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_2",
+      3,
+      189.2
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_2",
+      3,
+      189.2
+    ],
+    "track_state": "lost",
+    "score": null,
+    "reason": "no_topology_edge"
+  },
+  {
+    "seg": [
+      "camera_new_2",
+      3,
+      189.2
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_2",
+      3,
+      189.2
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_2",
+      3,
+      189.2
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_2",
+      3,
+      189.2
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_2",
+      3,
+      189.2
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_2",
+      3,
+      189.2
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_2",
+      3,
+      189.2
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_2",
+      3,
+      189.2
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "same_cam_overlap"
+  },
+  {
+    "seg": [
+      "camera_new_2",
+      3,
+      189.2
+    ],
+    "track_state": "lost",
+    "score": null,
+    "reason": "no_topology_edge"
+  },
+  {
+    "seg": [
+      "camera_new_2",
+      3,
+      189.2
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_2",
+      3,
+      189.2
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_2",
+      3,
+      189.2
+    ],
+    "track_state": "lost",
+    "score": null,
+    "reason": "no_topology_edge"
+  },
+  {
+    "seg": [
+      "camera_new_2",
+      3,
+      189.2
+    ],
+    "track_state": "lost",
+    "score": null,
+    "reason": "no_topology_edge"
+  },
+  {
+    "seg": [
+      "camera_new_2",
+      4,
+      189.6
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "same_cam_overlap"
+  },
+  {
+    "seg": [
+      "camera_new_2",
+      4,
+      189.6
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_2",
+      4,
+      189.6
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_2",
+      4,
+      189.6
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_2",
+      4,
+      189.6
+    ],
+    "track_state": "lost",
+    "score": null,
+    "reason": "no_topology_edge"
+  },
+  {
+    "seg": [
+      "camera_new_2",
+      4,
+      189.6
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_2",
+      4,
+      189.6
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_2",
+      4,
+      189.6
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_2",
+      4,
+      189.6
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_2",
+      4,
+      189.6
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_2",
+      4,
+      189.6
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_2",
+      4,
+      189.6
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_2",
+      4,
+      189.6
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "same_cam_overlap"
+  },
+  {
+    "seg": [
+      "camera_new_2",
+      4,
+      189.6
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_2",
+      4,
+      189.6
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_2",
+      4,
+      189.6
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_2",
+      4,
+      189.6
+    ],
+    "track_state": "lost",
+    "score": null,
+    "reason": "no_topology_edge"
+  },
+  {
+    "seg": [
+      "camera_new_2",
+      4,
+      189.6
+    ],
+    "track_state": "lost",
+    "score": null,
+    "reason": "no_topology_edge"
+  },
+  {
+    "seg": [
+      "camera_new_2",
+      4,
+      189.6
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "same_cam_overlap"
+  },
+  {
+    "seg": [
+      "camera_new_1",
+      3,
+      192.4
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_1",
+      3,
+      192.4
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_1",
+      3,
+      192.4
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_1",
+      3,
+      192.4
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_1",
+      3,
+      192.4
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_1",
+      3,
+      192.4
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_1",
+      3,
+      192.4
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_1",
+      3,
+      192.4
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_1",
+      3,
+      192.4
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_1",
+      3,
+      192.4
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_1",
+      3,
+      192.4
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_1",
+      3,
+      192.4
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_1",
+      3,
+      192.4
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_1",
+      3,
+      192.4
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_1",
+      3,
+      192.4
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "same_cam_overlap"
+  },
+  {
+    "seg": [
+      "camera_new_1",
+      3,
+      192.4
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "same_cam_overlap"
+  },
+  {
+    "seg": [
+      "camera_new_1",
+      3,
+      192.4
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_1",
+      3,
+      192.4
+    ],
+    "track_state": "lost",
+    "score": null,
+    "reason": "no_topology_edge"
+  },
+  {
+    "seg": [
+      "camera_new_1",
+      3,
+      192.4
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_1",
+      3,
+      192.4
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_1",
+      4,
+      192.4
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_1",
+      4,
+      192.4
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_1",
+      4,
+      192.4
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_1",
+      4,
+      192.4
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_1",
+      4,
+      192.4
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_1",
+      4,
+      192.4
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_1",
+      4,
+      192.4
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_1",
+      4,
+      192.4
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_1",
+      4,
+      192.4
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_1",
+      4,
+      192.4
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_1",
+      4,
+      192.4
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_1",
+      4,
+      192.4
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_1",
+      4,
+      192.4
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_1",
+      4,
+      192.4
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_1",
+      4,
+      192.4
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "same_cam_overlap"
+  },
+  {
+    "seg": [
+      "camera_new_1",
+      4,
+      192.4
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "same_cam_overlap"
+  },
+  {
+    "seg": [
+      "camera_new_1",
+      4,
+      192.4
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_1",
+      4,
+      192.4
+    ],
+    "track_state": "lost",
+    "score": null,
+    "reason": "no_topology_edge"
+  },
+  {
+    "seg": [
+      "camera_new_1",
+      4,
+      192.4
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_1",
+      4,
+      192.4
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_2",
+      5,
+      194.4
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "same_cam_overlap"
+  },
+  {
+    "seg": [
+      "camera_new_2",
+      5,
+      194.4
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_2",
+      5,
+      194.4
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_2",
+      5,
+      194.4
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_2",
+      5,
+      194.4
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_2",
+      5,
+      194.4
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_2",
+      5,
+      194.4
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_2",
+      5,
+      194.4
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_2",
+      5,
+      194.4
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_2",
+      5,
+      194.4
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_2",
+      5,
+      194.4
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_2",
+      5,
+      194.4
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_2",
+      5,
+      194.4
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "same_cam_overlap"
+  },
+  {
+    "seg": [
+      "camera_new_2",
+      5,
+      194.4
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_2",
+      5,
+      194.4
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_2",
+      5,
+      194.4
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_2",
+      5,
+      194.4
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_2",
+      5,
+      194.4
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_2",
+      5,
+      194.4
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "same_cam_overlap"
+  },
+  {
+    "seg": [
+      "camera_new_2",
+      5,
+      194.4
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "same_cam_overlap"
+  },
+  {
+    "seg": [
+      "camera_new_2",
+      5,
+      194.4
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_2",
+      5,
+      194.4
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_5",
+      7,
+      200.4
+    ],
+    "track_state": "lost",
+    "score": null,
+    "reason": "no_topology_edge"
+  },
+  {
+    "seg": [
+      "camera_new_5",
+      7,
+      200.4
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_5",
+      7,
+      200.4
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_5",
+      7,
+      200.4
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_5",
+      7,
+      200.4
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_5",
+      7,
+      200.4
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_5",
+      7,
+      200.4
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_5",
+      7,
+      200.4
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_5",
+      7,
+      200.4
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_5",
+      7,
+      200.4
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_5",
+      7,
+      200.4
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_5",
+      7,
+      200.4
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_5",
+      7,
+      200.4
+    ],
+    "track_state": "lost",
+    "score": null,
+    "reason": "no_topology_edge"
+  },
+  {
+    "seg": [
+      "camera_new_5",
+      7,
+      200.4
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_5",
+      7,
+      200.4
+    ],
+    "track_state": "lost",
+    "score": null,
+    "reason": "no_topology_edge"
+  },
+  {
+    "seg": [
+      "camera_new_5",
+      7,
+      200.4
+    ],
+    "track_state": "lost",
+    "score": null,
+    "reason": "no_topology_edge"
+  },
+  {
+    "seg": [
+      "camera_new_5",
+      7,
+      200.4
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_5",
+      7,
+      200.4
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_5",
+      7,
+      200.4
+    ],
+    "track_state": "lost",
+    "score": null,
+    "reason": "no_topology_edge"
+  },
+  {
+    "seg": [
+      "camera_new_5",
+      7,
+      200.4
+    ],
+    "track_state": "lost",
+    "score": null,
+    "reason": "no_topology_edge"
+  },
+  {
+    "seg": [
+      "camera_new_5",
+      7,
+      200.4
+    ],
+    "track_state": "lost",
+    "score": null,
+    "reason": "no_topology_edge"
+  },
+  {
+    "seg": [
+      "camera_new_5",
+      7,
+      200.4
+    ],
+    "track_state": "lost",
+    "score": null,
+    "reason": "no_topology_edge"
+  },
+  {
+    "seg": [
+      "camera_new_5",
+      7,
+      200.4
+    ],
+    "track_state": "lost",
+    "score": null,
+    "reason": "no_topology_edge"
+  },
+  {
+    "seg": [
+      "camera_new_5",
+      8,
+      204.8
+    ],
+    "track_state": "lost",
+    "score": null,
+    "reason": "no_topology_edge"
+  },
+  {
+    "seg": [
+      "camera_new_5",
+      8,
+      204.8
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_5",
+      8,
+      204.8
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_5",
+      8,
+      204.8
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_5",
+      8,
+      204.8
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_5",
+      8,
+      204.8
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_5",
+      8,
+      204.8
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_5",
+      8,
+      204.8
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_5",
+      8,
+      204.8
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_5",
+      8,
+      204.8
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_5",
+      8,
+      204.8
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_5",
+      8,
+      204.8
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_5",
+      8,
+      204.8
+    ],
+    "track_state": "lost",
+    "score": null,
+    "reason": "no_topology_edge"
+  },
+  {
+    "seg": [
+      "camera_new_5",
+      8,
+      204.8
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_5",
+      8,
+      204.8
+    ],
+    "track_state": "lost",
+    "score": null,
+    "reason": "no_topology_edge"
+  },
+  {
+    "seg": [
+      "camera_new_5",
+      8,
+      204.8
+    ],
+    "track_state": "lost",
+    "score": null,
+    "reason": "no_topology_edge"
+  },
+  {
+    "seg": [
+      "camera_new_5",
+      8,
+      204.8
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_5",
+      8,
+      204.8
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_5",
+      8,
+      204.8
+    ],
+    "track_state": "lost",
+    "score": null,
+    "reason": "no_topology_edge"
+  },
+  {
+    "seg": [
+      "camera_new_5",
+      8,
+      204.8
+    ],
+    "track_state": "lost",
+    "score": null,
+    "reason": "no_topology_edge"
+  },
+  {
+    "seg": [
+      "camera_new_5",
+      8,
+      204.8
+    ],
+    "track_state": "lost",
+    "score": null,
+    "reason": "no_topology_edge"
+  },
+  {
+    "seg": [
+      "camera_new_5",
+      8,
+      204.8
+    ],
+    "track_state": "lost",
+    "score": null,
+    "reason": "no_topology_edge"
+  },
+  {
+    "seg": [
+      "camera_new_5",
+      8,
+      204.8
+    ],
+    "track_state": "lost",
+    "score": null,
+    "reason": "no_topology_edge"
+  },
+  {
+    "seg": [
+      "camera_new_5",
+      8,
+      204.8
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "same_cam_overlap"
+  },
+  {
+    "seg": [
+      "camera_new_4",
+      6,
+      208.0
+    ],
+    "track_state": "lost",
+    "score": null,
+    "reason": "no_topology_edge"
+  },
+  {
+    "seg": [
+      "camera_new_4",
+      6,
+      208.0
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_4",
+      6,
+      208.0
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_4",
+      6,
+      208.0
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_4",
+      6,
+      208.0
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_4",
+      6,
+      208.0
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_4",
+      6,
+      208.0
+    ],
+    "track_state": "confident",
+    "score": 0.9535816367172699,
+    "reason": "ok"
+  },
+  {
+    "seg": [
+      "camera_new_4",
+      6,
+      208.0
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_4",
+      6,
+      208.0
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_4",
+      6,
+      208.0
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_4",
+      6,
+      208.0
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_4",
+      6,
+      208.0
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_4",
+      6,
+      208.0
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_4",
+      6,
+      208.0
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_4",
+      6,
+      208.0
+    ],
+    "track_state": "lost",
+    "score": null,
+    "reason": "no_topology_edge"
+  },
+  {
+    "seg": [
+      "camera_new_4",
+      6,
+      208.0
+    ],
+    "track_state": "lost",
+    "score": null,
+    "reason": "no_topology_edge"
+  },
+  {
+    "seg": [
+      "camera_new_4",
+      6,
+      208.0
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_4",
+      6,
+      208.0
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_4",
+      6,
+      208.0
+    ],
+    "track_state": "lost",
+    "score": null,
+    "reason": "no_topology_edge"
+  },
+  {
+    "seg": [
+      "camera_new_4",
+      6,
+      208.0
+    ],
+    "track_state": "lost",
+    "score": null,
+    "reason": "no_topology_edge"
+  },
+  {
+    "seg": [
+      "camera_new_4",
+      6,
+      208.0
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_4",
+      6,
+      208.0
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_4",
+      6,
+      208.0
+    ],
+    "track_state": "died",
+    "score": null,
+    "reason": "track_dead"
+  },
+  {
+    "seg": [
+      "camera_new_4",
+      6,
+      208.0
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
+  },
+  {
+    "seg": [
+      "camera_new_4",
+      6,
+      208.0
+    ],
+    "track_state": "confident",
+    "score": null,
+    "reason": "bev_infeasible"
   }
 ]
