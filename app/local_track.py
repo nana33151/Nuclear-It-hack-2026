@@ -141,6 +141,10 @@ def _stitch_same_camera(
                 gap = float(t.t_start) - float(m.t_end)
                 if gap < 0.0 or gap > max_gap:
                     continue
+                # Разные размерности ReID (Solider 768 vs color 32) —
+                # не сравниваем, оставляем как отдельные треклеты.
+                if m.reid.shape != t.reid.shape:
+                    continue
                 if _cosine_sim(_l2(m.reid), _l2(t.reid)) < min_sim:
                     continue
                 m.t_end = max(m.t_end, t.t_end)

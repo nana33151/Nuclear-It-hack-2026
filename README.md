@@ -1,52 +1,102 @@
-# Nuclear-It-hack-2026 — offline multi-camera tracking
 
-Склейка зон ответственности:
+## Запуск
+### 1. Требования
+- Python ≥ 3.10
+- 8 GB RAM
 
-| Зона | Папка | Роль в демо |
-|------|--------|-------------|
-| Person 1 | `person1/` | YOLO11-seg (`yolo11s-seg.pt`) → боксы person |
-| Person 2 | `mtmc-person2/` | ByteTrack + SOLIDER / color ReID |
-| Person 3 | `person3/` | `GlobalTracker` (межкамерная склейка) + UI |
-
-Собранный прототип: пакет `app/`.
-
-## Быстрый старт
+### 2. Клонирование и окружение
+Распакуйте архив SOLIDER - это ReID модель и ее веса - он ждет вас на диске https://drive.google.com/drive/folders/1z7bkaUkUyJsUFcrJDotyzNJ1t_-WqR6w?usp=sharing
 
 ```bash
-cd /path/to/Nuclear-It-hack-2026
+git clone <repo>
+cd Nuclear-It-hack-2026
+python -m venv .venv && source .venv/bin/activate
+pip install --upgrade pip
 pip install -r requirements.txt
-bash scripts/download_solider_weights.sh   # ~190MB Swin-S Market → weights/
-
-# короткий прогон на 2 камерах (~30 с, каждый 5-й кадр)
-python -m app.pipeline --start-sec 0 --max-sec 30 --stride 5 --cameras camera_new_1 camera_new_2
-
-# UI (из корня репо)
-streamlit run app/ui_streamlit.py
 ```
 
-Окно обработки: `start_sec` / `max_sec` в `app/config.yaml` или CLI `--start-sec` / `--max-sec`.  
-Без mp4: `--no-export-mp4`.  
-Без SOLIDER: в конфиге `reid.backend: color`.
+> Windows: вместо `source .venv/bin/activate` → `.venv\Scripts\activate`
 
-Видео: `Video/camera_new_*.mkv`. Артефакты: `output/tracks.json`, `output/overlays.json`, `output/videos/*.mp4` (боксы + ID).
+### 3. Веса
 
-## Что делает пайплайн
+```bash
+bash scripts/download_solider_weights.sh
+```
 
-1. **Детекция** — YOLO11-seg, класс person. В UI только прямоугольники (без заливки маски).
-2. **Локальный MOT** — ByteTrack из `mtmc-person2` на каждой камере.
-3. **ReID** — SOLIDER Swin-S (Market) на usable кропах; fallback — средний цвет верх/низ.
-4. **Склейка** — `person3/GlobalTracker.py`: cosine ReID + цвет + время; закрытие при gap > `T`.
-5. **Export** — annotated mp4 с глобальными ID на боксах.
-6. **UI** — `st.video` превью + слайдер-инспектор, счётчик и карточка трека.
+### 4. Данные
+Положить 5 видео в `Video/` (см. `config/example.env`).
 
-Конфиг: `app/config.yaml` (`reid`, `start_sec`, `max_sec`, `stride`, `export_mp4`, пороги merge).
+## Запуск
 
-## Ограничения демо
+Собрать UI из готовых треков:
 
-- Полные ролики ~20 мин @ 2592×1944 — для ноутбука берите короткое окно и `stride`.
-- SOLIDER на CPU медленный; GPU сильно ускоряет.
-- Стекло / чужая комната в FOV всё ещё дают ложные детекции — ROI зон отдельно.
+```bash
+streamlit run app/ui_streamlit.py
+# http://localhost:8501
+```
+Запустить обработку заново со своими параметрами:
 
-## Сложность / модель
+```bash
+python -m app.pipeline --start-sec 175 --max-sec 15 --stride 5 \
+    --cameras camera_new_2 camera_new_3
+```
 
-**STANDARD.** Для правок UI/обвязки хватит Composer 2.5; пороги `T` / `min_sim` лучше сверять более сильной моделью.
+Опции:
+- `--no-export-mp4` — только json (~30 с вместо ~2 мин)
+- `--cameras ...` — только указанные камеры
+- `--stride N` — каждый N-й кадр
+
+
+
+
+# src — карта кода
+
+
+
+## Модули
+
+### `app/` — собранный прототип (оркестрация)
+
+| Файл | Что |
+|---|---|
+| `pipeline.py` | точка входа: детекция → MOT → merge → export → запись json |
+| `detect.py` | YOLO11-seg, `iter_video_sampled`, `detect_people` |
+| `local_track.py` | ByteTrack + SOLIDER, split/stitch |
+| `merge.py` | `to_global_tracks`, `build_overlays`, парсинг transitions |
+| `reid_solider.py` | обёртка SOLIDER, fallback на цвет |
+| `draw.py` | общие примитивы отрисовки (bbox + ID) |
+| `export_video.py` | рендер annotated mp4 |
+| `projectors_loader.py` | загрузка `Projector` из person2 без импорта пакета |
+| `bev_state.py` | BEV-логика UI: `BBoxEvent`, `BEVEvent`, маппинг local→global |
+| `bev_render.py` | Plotly-отрисовка плана |
+| `ui_streamlit.py` | 4 вкладки UI |
+| `paths.py` | ROOT и загрузка классов из person1/2/3 |
+| `config.yaml` | все параметры пайплайна |
+
+### `person1/` — детекция
+
+- `perception/cli.py`, `pipeline.py`, `handoff.py` — CLI-обёртка, экспорт детекций.
+- `models/yolo11s-seg.pt` — веса.
+
+### `mtmc-person2/` — локальный MOT + ReID + геометрия
+
+- `src/mot/` — ByteTrack (`byte_tracker_core.py`, `bytetrack.py`).
+- `src/reid/` — SOLIDER + color fallback.
+- `src/geometry/projectors.py` — 5 гомографий image→plan.
+- `src/geometry/office_model.py` — план помещения + зона зеркала.
+- `src/geometry/filter.py` — mirror filter.
+- `src/tracklets/` — build/split треклетов (person2-side).
+- `src/contract.py` — dataclass-контракты.
+
+### `person3/` — глобальный трекер
+
+- `GlobalTracker.py` — lifecycle + Hungarian + BEV-гейт.
+- `test_lifecycle.py` — smoke-тесты.
+
+## Скрипт: `tracks.json` → CSV
+
+В `artifacts/parse_tracks.py` лежит генератор плоских CSV:
+
+```bash
+python artifacts/parse_tracks.py output/tracks.json artifacts/
+# → artifacts/tracks.csv, artifacts/segments.csv
